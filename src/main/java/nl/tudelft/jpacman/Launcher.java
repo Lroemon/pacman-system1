@@ -2,7 +2,11 @@ package nl.tudelft.jpacman;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import nl.tudelft.jpacman.board.BoardFactory;
 import nl.tudelft.jpacman.board.Direction;
@@ -18,6 +22,7 @@ import nl.tudelft.jpacman.sprite.PacManSprites;
 import nl.tudelft.jpacman.ui.Action;
 import nl.tudelft.jpacman.ui.PacManUI;
 import nl.tudelft.jpacman.ui.PacManUiBuilder;
+import nl.tudelft.jpacman.ui.PlayerController;
 
 /**
  * Creates and launches the JPacMan UI.
@@ -30,10 +35,25 @@ public class Launcher {
     private static final PacManSprites SPRITE_STORE = new PacManSprites();
 
     public static final String DEFAULT_MAP = "/board.txt";
+    public static final String REVISITED_MAP = "/board2.txt";
     private String levelMap = DEFAULT_MAP;
 
     private PacManUI pacManUI;
     private Game game;
+
+    /**
+     * Controller of the player by
+     * BOOSO Sam
+     */
+    private PlayerController playerController;
+
+    /**
+     *
+     * @return the player controller
+     */
+    public PlayerController getPlayerController(){
+        return this.playerController;
+    }
 
     /**
      * @return The game object this launcher will start when {@link #launch()}
@@ -171,15 +191,44 @@ public class Launcher {
         return players.get(0);
     }
 
+    protected void addSinglePlayerKeysContiniousMovements(final PacManUiBuilder builder){
+        builder.addKey(KeyEvent.VK_UP, moveUntilDirectionChange(Direction.NORTH))
+            .addKey(KeyEvent.VK_DOWN, moveUntilDirectionChange(Direction.SOUTH))
+            .addKey(KeyEvent.VK_LEFT, moveUntilDirectionChange(Direction.WEST))
+            .addKey(KeyEvent.VK_RIGHT, moveUntilDirectionChange(Direction.EAST));
+    }
+
+    private Action moveUntilDirectionChange(Direction direction){
+        return () -> {
+            getPlayerController().setDirection(direction);
+        };
+    }
+
+
     /**
      * Creates and starts a JPac-Man game.
      */
     public void launch() {
+        this.withMapFile(REVISITED_MAP);
         makeGame();
         PacManUiBuilder builder = new PacManUiBuilder().withDefaultButtons();
         addSinglePlayerKeys(builder);
         pacManUI = builder.build(getGame());
         pacManUI.start();
+    }
+
+    /**
+     * Creates and starts a JPac-Man game BY SAM. Pacman continious movements
+     */
+    public void launchS(){
+        this.withMapFile(REVISITED_MAP);
+        makeGame();
+        PacManUiBuilder builder = new PacManUiBuilder().withDefaultButtons();
+        addSinglePlayerKeysContiniousMovements(builder);
+        pacManUI = builder.build(getGame());
+        playerController = new PlayerController(getGame(), getSinglePlayer(getGame()));
+        pacManUI.start();
+        playerController.startMoving();
     }
 
     /**
@@ -202,6 +251,6 @@ public class Launcher {
      *             When a resource could not be read.
      */
     public static void main(String[] args) throws IOException {
-        new Launcher().launch();
+        new Launcher().launchS();
     }
 }

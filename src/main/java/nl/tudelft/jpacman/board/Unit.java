@@ -10,6 +10,11 @@ import nl.tudelft.jpacman.sprite.Sprite;
 public abstract class Unit {
 
     /**
+     * Spawn square
+     */
+    private Square spawnSquare;
+
+    /**
      * The square this unit is currently occupying.
      */
     private Square square;
@@ -125,5 +130,23 @@ public abstract class Unit {
         }
 
         return destination;
+    }
+
+    /**
+     *
+     * @param spawnSquare the new spawnSquare
+     */
+    public void setSpawnSquare(Square spawnSquare){
+        this.spawnSquare = spawnSquare;
+    }
+
+    /**
+     * Teleport the ghost at spawn.
+     */
+    public void respawn(){
+        if(this.spawnSquare != null){
+            this.leaveSquare();
+            this.occupy(this.spawnSquare);
+        }
     }
 }

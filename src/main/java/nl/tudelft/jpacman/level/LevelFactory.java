@@ -32,6 +32,11 @@ public class LevelFactory {
     private static final int PELLET_VALUE = 10;
 
     /**
+     * The default value of a power pellet.
+     */
+    private static final int POWER_PELLET_VALUE = 50;
+
+    /**
      * The sprite store that provides sprites for units.
      */
     private final PacManSprites sprites;
@@ -75,9 +80,14 @@ public class LevelFactory {
                              List<Square> startPositions) {
 
         // We'll adopt the simple collision map for now.
-        CollisionMap collisionMap = new PlayerCollisions();
+        //CollisionMap collisionMap = new PlayerCollisions();
+        //Not SIMPLE SAM
+        DefaultPlayerInteractionMap collisionMap = new DefaultPlayerInteractionMap();
+        Level level = new Level(board, ghosts, startPositions, collisionMap);
 
-        return new Level(board, ghosts, startPositions, collisionMap);
+        collisionMap.setLevel(level);
+
+        return level;
     }
 
     /**
@@ -85,21 +95,23 @@ public class LevelFactory {
      *
      * @return The new ghost.
      */
-    Ghost createGhost() {
+    public Ghost createGhost() {
+        Ghost ghost;
         ghostIndex++;
         ghostIndex %= GHOSTS;
         switch (ghostIndex) {
             case BLINKY:
-                return ghostFact.createBlinky();
+                ghost = ghostFact.createBlinky(); break;
             case INKY:
-                return ghostFact.createInky();
+                ghost = ghostFact.createInky(); break;
             case PINKY:
-                return ghostFact.createPinky();
+                ghost = ghostFact.createPinky(); break;
             case CLYDE:
-                return ghostFact.createClyde();
+                ghost = ghostFact.createClyde(); break;
             default:
-                return new RandomGhost(sprites.getGhostSprite(GhostColor.RED));
+                ghost = new RandomGhost(sprites.getGhostSprite(GhostColor.RED));
         }
+        return ghost;
     }
 
     /**
@@ -109,6 +121,22 @@ public class LevelFactory {
      */
     public Pellet createPellet() {
         return new Pellet(PELLET_VALUE, sprites.getPelletSprite());
+    }
+
+    /**
+     * Creates a new power pellet.
+     *
+     * @return The new power pellet.
+     */
+    public PowerPellet createPowerPellet(){ return new PowerPellet(POWER_PELLET_VALUE, sprites.getPowerPelletSprite()); }
+
+    /**
+     *
+     * @param fruit the type of the fruit.
+     * @return a fruit.
+     */
+    public FruitPellet createFruitPellet(FruitPellet.FruitType fruit){
+        return new FruitPellet(PELLET_VALUE, sprites.loadSprite(fruit.spritePath));
     }
 
     /**

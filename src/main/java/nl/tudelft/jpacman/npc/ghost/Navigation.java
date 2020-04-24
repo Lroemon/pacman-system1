@@ -55,18 +55,17 @@ public final class Navigation {
                 return node.getPath();
             }
             visited.add(square);
-            addNewTargets(traveller, targets, visited, node, square);
+            addNewTargets(new AssessTargets(traveller, targets, visited, node, square));
         }
         return null;
     }
 
-    private static void addNewTargets(Unit traveller, List<Node> targets,
-                                      Set<Square> visited, Node node, Square square) {
+    private static void addNewTargets(AssessTargets assessTargets) {
         for (Direction direction : Direction.values()) {
-            Square target = square.getSquareAt(direction);
-            if (!visited.contains(target)
-                && (traveller == null || target.isAccessibleTo(traveller))) {
-                targets.add(new Node(direction, target, node));
+            Square target = assessTargets.square.getSquareAt(direction);
+            if (!assessTargets.visited.contains(target)
+                && (assessTargets.traveller == null || target.isAccessibleTo(assessTargets.traveller))) {
+                assessTargets.targets.add(new Node(direction, target, assessTargets.node));
             }
         }
     }
@@ -160,7 +159,7 @@ public final class Navigation {
      *
      * @author Jeroen Roosen
      */
-    private static final class Node {
+    public static final class Node {
 
         /**
          * The direction for this node, which is <code>null</code> for the root
@@ -231,6 +230,22 @@ public final class Navigation {
             List<Direction> path = parent.getPath();
             path.add(getDirection());
             return path;
+        }
+    }
+
+    public static class AssessTargets {
+        public final Unit traveller;
+        public final List<Node> targets;
+        public final Set<Square> visited;
+        public final Node node;
+        public final Square square;
+
+        public AssessTargets(Unit traveller, List<Node> targets, Set<Square> visited, Node node, Square square) {
+            this.traveller = traveller;
+            this.targets = targets;
+            this.visited = visited;
+            this.node = node;
+            this.square = square;
         }
     }
 }

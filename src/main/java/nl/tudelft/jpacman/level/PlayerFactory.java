@@ -34,6 +34,14 @@ public class PlayerFactory {
     }
 
     /**
+     *
+     * @return a new player for method testing.
+     */
+    public Player createTestPacMand(){
+        return new Player();
+    }
+
+    /**
      * The sprites created by the factory.
      *
      * @return The sprites for the player created.

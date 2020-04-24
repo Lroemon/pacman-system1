@@ -42,4 +42,13 @@ public class Pellet extends Unit {
     public Sprite getSprite() {
         return image;
     }
+
+    /**
+     *
+     * @param player who eat this pellet
+     */
+    public void onEat(Level level, Player player){
+        this.leaveSquare();
+        player.addPoints(this.getValue());
+    }
 }

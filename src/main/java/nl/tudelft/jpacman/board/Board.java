@@ -1,6 +1,14 @@
 package nl.tudelft.jpacman.board;
 
 
+import nl.tudelft.jpacman.PacmanConfigurationException;
+import nl.tudelft.jpacman.level.Player;
+import nl.tudelft.jpacman.level.PlayerFactory;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 /**
  * A top-down view of a matrix of {@link Square}s.
  *
@@ -90,5 +98,81 @@ public class Board {
      */
     public boolean withinBorders(int x, int y) {
         return x >= 0 && x < getWidth() && y >= 0 && y < getHeight();
+    }
+
+    /**
+     * Check if the grid is well done. It means that all way of the map is accessible.
+     */
+    public void checkGrid(){
+        Player player = new PlayerFactory(null).createTestPacMand();
+        Square first = getFirstAccessibleSquare(player);
+
+        List<Square> explored = explore(first, player);
+
+        for(Square[] squaresLine : this.board){
+            for(Square square : squaresLine){
+                if(square.isAccessibleTo(player)){
+                    if(!explored.contains(square)){
+                        throw new PacmanConfigurationException("All squares of the board are not accessible by PacMan !");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param first the first square to explore.
+     * @param unit the unit which explores.
+     * @return a list of Square explored.
+     */
+    private List<Square> explore(Square first, Unit unit){
+        List<Square> explored = new LinkedList<Square>();
+        Queue<Square> toExplore = new LinkedList<Square>();
+
+        do{
+            explored.add(first);
+            toExplore.addAll(nextSquares(first, unit, explored));
+            first = toExplore.poll();
+        }while(first != null);
+
+        return explored;
+    }
+
+    /**
+     *
+     * @param square the square where the unit is.
+     * @param unit the unit which moves.
+     * @param except restriction list of squares.
+     * @return the list of square that this unit can go.
+     */
+    private List<Square> nextSquares(Square square, Unit unit, List<Square> except){
+        List<Square> squares = new LinkedList<Square>();
+
+        for (Direction direction : Direction.values()){
+            Square nextSquare = square.getSquareAt(direction);
+            boolean isAccessible = nextSquare == null ? false : nextSquare.isAccessibleTo(unit);
+
+            if(isAccessible && !except.contains(nextSquare)){
+                squares.add(nextSquare);
+            }
+        }
+
+        return squares;
+    }
+
+    /**
+     *
+     * @return the first square which is accessible.
+     */
+    private Square getFirstAccessibleSquare(Unit unit){
+        for(Square[] squareLine : this.board){
+            for(Square square : squareLine){
+                if(square.isAccessibleTo(unit)){
+                    return square;
+                }
+            }
+        }
+        return null;
     }
 }

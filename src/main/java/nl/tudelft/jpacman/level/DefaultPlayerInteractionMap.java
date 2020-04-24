@@ -18,6 +18,12 @@ public class DefaultPlayerInteractionMap implements CollisionMap {
 
     private final CollisionMap collisions = defaultCollisions();
 
+    private Level level;
+
+    public void setLevel(Level level){
+        this.level = level;
+    }
+
     @Override
     public void collide(Unit mover, Unit movedInto) {
         collisions.collide(mover, movedInto);
@@ -29,17 +35,23 @@ public class DefaultPlayerInteractionMap implements CollisionMap {
      * @return The collision map containing collisions for Player-Ghost and
      *         Player-Pellet.
      */
-    private static CollisionInteractionMap defaultCollisions() {
+    private CollisionInteractionMap defaultCollisions() {
         CollisionInteractionMap collisionMap = new CollisionInteractionMap();
 
         collisionMap.onCollision(Player.class, Ghost.class,
-            (player, ghost) -> player.setAlive(false));
+            (player, ghost) -> {
+                if(ghost.isScared()){
+                    player.addPoints(player.killGhost(ghost));
+                }else{
+                    player.setAlive(false);
+                }
+            });
 
         collisionMap.onCollision(Player.class, Pellet.class,
             (player, pellet) -> {
-                pellet.leaveSquare();
-                player.addPoints(pellet.getValue());
+                pellet.onEat(level, player);
             });
+
         return collisionMap;
     }
 }

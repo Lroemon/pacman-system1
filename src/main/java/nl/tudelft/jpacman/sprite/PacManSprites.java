@@ -106,9 +106,19 @@ public class PacManSprites extends SpriteStore {
      */
     public Map<Direction, Sprite> getGhostSprite(GhostColor color) {
         assert color != null;
-
-        String resource = "/sprite/ghost_" + color.name().toLowerCase()
+        return getGhostSprite(color.name().toLowerCase());
+        /*String resource = "/sprite/ghost_" + color.name().toLowerCase()
             + ".png";
+        return directionSprite(resource, GHOST_ANIMATION_FRAMES);*/
+    }
+
+    /**
+     *
+     * @param name of the ghost folowing the format ghost_\<NAME\>.png
+     * @return The Sprite for the ghost.
+     */
+    public Map<Direction, Sprite> getGhostSprite(String name){
+        String resource = "/sprite/ghost_" + name + ".png";
         return directionSprite(resource, GHOST_ANIMATION_FRAMES);
     }
 
@@ -127,11 +137,17 @@ public class PacManSprites extends SpriteStore {
     }
 
     /**
-     * @return The sprite for the
+     * @return The sprite for the pellet.
      */
     public Sprite getPelletSprite() {
         return loadSprite("/sprite/pellet.png");
     }
+
+    /**
+     * @return The sprite for the power pellet.
+     */
+    public Sprite getPowerPelletSprite(){
+        return loadSprite("/sprite/power_pellet.png"); }
 
     /**
      * Overloads the default sprite loading, ignoring the exception. This class

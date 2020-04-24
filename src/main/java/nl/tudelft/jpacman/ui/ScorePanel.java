@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import nl.tudelft.jpacman.level.Level;
 import nl.tudelft.jpacman.level.Player;
 
 /**
@@ -25,9 +26,19 @@ public class ScorePanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     /**
+     * The index of the label which displays the player score.
+     */
+    private static final int PLAYER_SCORE_LABEL_INDEX = 0;
+
+    /**
+     * The index of the label which displays the current player life number.
+     */
+    private static final int PLAYER_LIFE_LEFT_LABEL_INDEX = 1;
+
+    /**
      * The map of players and the labels their scores are on.
      */
-    private final Map<Player, JLabel> scoreLabels;
+    private final Map<Player, JLabel[]> scoreLabels;
 
     /**
      * The default way in which the score is shown.
@@ -50,7 +61,7 @@ public class ScorePanel extends JPanel {
         super();
         assert players != null;
 
-        setLayout(new GridLayout(2, players.size()));
+        setLayout(new GridLayout(3, players.size()));
 
         for (int i = 1; i <= players.size(); i++) {
             add(new JLabel("Player " + i, JLabel.CENTER));
@@ -58,23 +69,34 @@ public class ScorePanel extends JPanel {
         scoreLabels = new LinkedHashMap<>();
         for (Player player : players) {
             JLabel scoreLabel = new JLabel("0", JLabel.CENTER);
-            scoreLabels.put(player, scoreLabel);
+            JLabel lifeLeftLabel = new JLabel(getLifeLeftLabelText(player), JLabel.CENTER);
+
+            scoreLabels.put(player, new JLabel[]{scoreLabel, lifeLeftLabel});
+
             add(scoreLabel);
+            add(lifeLeftLabel);
         }
+    }
+
+    private String getLifeLeftLabelText(Player player){
+        return "Life(s) : " + player.getLifeLeft();
     }
 
     /**
      * Refreshes the scores of the players.
      */
     protected void refresh() {
-        for (Map.Entry<Player, JLabel> entry : scoreLabels.entrySet()) {
+        for (Map.Entry<Player, JLabel[]> entry : scoreLabels.entrySet()) {
             Player player = entry.getKey();
+            JLabel[] labels = entry.getValue();
+
             String score = "";
             if (!player.isAlive()) {
                 score = "You died. ";
             }
             score += scoreFormatter.format(player);
-            entry.getValue().setText(score);
+            labels[PLAYER_SCORE_LABEL_INDEX].setText(score);
+            labels[PLAYER_LIFE_LEFT_LABEL_INDEX].setText(getLifeLeftLabelText(player));
         }
     }
 

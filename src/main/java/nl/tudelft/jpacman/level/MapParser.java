@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nl.tudelft.jpacman.PacmanConfigurationException;
 import nl.tudelft.jpacman.board.Board;
@@ -32,6 +34,11 @@ public class MapParser {
     private final BoardFactory boardCreator;
 
     /**
+     * The map with all square builders.
+     */
+    private final Map<Character, SquareBuilder> squareBuilders = getSquareBuilders();
+
+    /**
      * Creates a new map parser.
      *
      * @param levelFactory
@@ -44,6 +51,105 @@ public class MapParser {
         this.boardCreator = boardFactory;
     }
 
+    private Map<Character, SquareBuilder> getSquareBuilders(){
+        Map<Character, SquareBuilder> squareBuilders = new HashMap<Character, SquareBuilder>();
+
+        squareBuilders.put(' ', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                return boardCreator.createGround();
+            }
+        });
+
+        squareBuilders.put('#', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                return boardCreator.createWall();
+            }
+        });
+
+        squareBuilders.put('.', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createPellet().occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
+        squareBuilders.put('G', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                return makeGhostSquare(super.ghosts, levelCreator.createGhost());
+            }
+        });
+
+        squareBuilders.put('P', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square playerSquare = boardCreator.createGround();
+                super.startPositions.add(playerSquare);
+                return playerSquare;
+            }
+        });
+
+        squareBuilders.put('0', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square powerPelletSquare = boardCreator.createGround();
+                levelCreator.createPowerPellet().occupy(powerPelletSquare);
+                return powerPelletSquare;
+            }
+        });
+
+        squareBuilders.put('A', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createFruitPellet(FruitPellet.FruitType.APPLE).occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
+        squareBuilders.put('C', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createFruitPellet(FruitPellet.FruitType.CHERRY).occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
+        squareBuilders.put('M', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createFruitPellet(FruitPellet.FruitType.MELON).occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
+        squareBuilders.put('O', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createFruitPellet(FruitPellet.FruitType.ORANGE).occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
+        squareBuilders.put('S', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createFruitPellet(FruitPellet.FruitType.STRAWBERRY).occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
+        return squareBuilders;
+    }
+
     /**
      * Parses the text representation of the board into an actual level.
      *
@@ -54,6 +160,11 @@ public class MapParser {
      * <li>'.' (period) a square with a pellet.
      * <li>'P' (capital P) a starting square for players.
      * <li>'G' (capital G) a square with a ghost.
+     * <li>'A' (capital A) an apple.</li>
+     * <li>'C' (capital C) a cherry.</li>
+     * <li>'S' (capital S) a strawberry.</li>
+     * <li>'O' (capital O) an orange.</li>
+     * <li>'M' (capital M) a melon.</li>
      * </ul>
      *
      * @param map
@@ -70,18 +181,25 @@ public class MapParser {
         List<Ghost> ghosts = new ArrayList<>();
         List<Square> startPositions = new ArrayList<>();
 
-        makeGrid(map, width, height, grid, ghosts, startPositions);
+        makeGrid(new MakeGridParameters(map, width, height, grid, ghosts, startPositions));
 
         Board board = boardCreator.createBoard(grid);
+        board.checkGrid();
         return levelCreator.createLevel(board, ghosts, startPositions);
     }
 
-    private void makeGrid(char[][] map, int width, int height,
-                          Square[][] grid, List<Ghost> ghosts, List<Square> startPositions) {
+    private void makeGrid(MakeGridParameters makeGridParameters) {
+        int width = makeGridParameters.width;
+        int height = makeGridParameters.height;
+        char[][] map = makeGridParameters.map;
+        Square[][] grid = makeGridParameters.grid;
+        List<Ghost> ghosts = makeGridParameters.ghosts;
+        List<Square> startPositions = makeGridParameters.startPositions;
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 char c = map[x][y];
-                addSquare(grid, ghosts, startPositions, x, y, c);
+                addSquare(new AddSquareParameters(grid, ghosts, startPositions, x, y, c));
             }
         }
     }
@@ -91,48 +209,24 @@ public class MapParser {
      * character come from the map files and describe the type
      * of square.
      *
-     * @param grid
-     *            The grid of squares with board[x][y] being the
-     *            square at column x, row y.
-     * @param ghosts
-     *            List of all ghosts that were added to the map.
-     * @param startPositions
-     *            List of all start positions that were added
-     *            to the map.
-     * @param x
-     *            x coordinate of the square.
-     * @param y
-     *            y coordinate of the square.
-     * @param c
-     *            Character describing the square type.
+     * @param addSquareParameters
      */
-    protected void addSquare(Square[][] grid, List<Ghost> ghosts,
-                             List<Square> startPositions, int x, int y, char c) {
-        switch (c) {
-            case ' ':
-                grid[x][y] = boardCreator.createGround();
-                break;
-            case '#':
-                grid[x][y] = boardCreator.createWall();
-                break;
-            case '.':
-                Square pelletSquare = boardCreator.createGround();
-                grid[x][y] = pelletSquare;
-                levelCreator.createPellet().occupy(pelletSquare);
-                break;
-            case 'G':
-                Square ghostSquare = makeGhostSquare(ghosts, levelCreator.createGhost());
-                grid[x][y] = ghostSquare;
-                break;
-            case 'P':
-                Square playerSquare = boardCreator.createGround();
-                grid[x][y] = playerSquare;
-                startPositions.add(playerSquare);
-                break;
-            default:
-                throw new PacmanConfigurationException("Invalid character at "
-                    + x + "," + y + ": " + c);
+    protected void addSquare(AddSquareParameters addSquareParameters) {
+        Square[][] grid = addSquareParameters.grid;
+        List<Square> startPositions = addSquareParameters.startPositions;
+        int x = addSquareParameters.x;
+        int y = addSquareParameters.y;
+        char c = addSquareParameters.c;
+        List<Ghost> ghosts = addSquareParameters.ghosts;
+
+        SquareBuilder builder = this.squareBuilders.getOrDefault(c, null);
+        if(builder == null){
+            throw new PacmanConfigurationException("Invalid character at "
+                + x + "," + y + ": " + c);
         }
+
+        builder.buildSquare(addSquareParameters);
+
     }
 
     /**
@@ -147,6 +241,7 @@ public class MapParser {
         Square ghostSquare = boardCreator.createGround();
         ghosts.add(ghost);
         ghost.occupy(ghostSquare);
+        ghost.setSpawnSquare(ghostSquare);
         return ghostSquare;
     }
 
@@ -255,5 +350,86 @@ public class MapParser {
      */
     protected BoardFactory getBoardCreator() {
         return boardCreator;
+    }
+
+    /**
+     * Interface to generate board game element from character
+     */
+    public interface SquareBuilder{
+        void buildSquare(AddSquareParameters addSquareParameters);
+    }
+
+    private abstract class ADefaultSquareBuilder implements SquareBuilder{
+        private Square[][] grid;
+        private List<Ghost> ghosts;
+        private List<Square> startPositions;
+        private int x;
+        private int y;
+        private char c;
+
+        @Override
+        public void buildSquare(AddSquareParameters addSquareParameters){
+            this.grid = addSquareParameters.grid;
+            this.ghosts = addSquareParameters.ghosts;
+            this.startPositions = addSquareParameters.startPositions;
+            this.x = addSquareParameters.x;
+            this.y = addSquareParameters.y;
+            this.c = addSquareParameters.c;
+
+            this.grid[x][y] = this.getSquare();
+        }
+
+        protected abstract Square getSquare();
+    }
+
+    private static class AddSquareParameters {
+        public final Square[][] grid;
+        public final List<Ghost> ghosts;
+        public final List<Square> startPositions;
+        public final int x;
+        public final int y;
+        public final char c;
+
+        /**
+         * @param grid
+         *            The grid of squares with board[x][y] being the
+         *            square at column x, row y.
+         * @param ghosts
+         *            List of all ghosts that were added to the map.
+         * @param startPositions
+         *            List of all start positions that were added
+         *            to the map.
+         * @param x
+         *            x coordinate of the square.
+         * @param y
+         *            y coordinate of the square.
+         * @param c
+         */
+        private AddSquareParameters(Square[][] grid, List<Ghost> ghosts, List<Square> startPositions, int x, int y, char c) {
+            this.grid = grid;
+            this.ghosts = ghosts;
+            this.startPositions = startPositions;
+            this.x = x;
+            this.y = y;
+            this.c = c;
+        }
+    }
+
+    private static class MakeGridParameters {
+        public final char[][] map;
+        public final int width;
+        public final int height;
+        public final Square[][] grid;
+        public final List<Ghost> ghosts;
+        public final List<Square> startPositions;
+
+        private MakeGridParameters(char[][] map, int width, int height, Square[][] grid, List<Ghost> ghosts, List<Square> startPositions) {
+            this.map = map;
+            this.width = width;
+            this.height = height;
+            this.grid = grid;
+            this.ghosts = ghosts;
+            this.startPositions = startPositions;
+        }
     }
 }

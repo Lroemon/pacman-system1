@@ -3,6 +3,8 @@ package nl.tudelft.jpacman.npc;
 import nl.tudelft.jpacman.board.Direction;
 import nl.tudelft.jpacman.board.Square;
 import nl.tudelft.jpacman.board.Unit;
+import nl.tudelft.jpacman.npc.ghost.GhostFactory;
+import nl.tudelft.jpacman.sprite.PacManSprites;
 import nl.tudelft.jpacman.sprite.Sprite;
 
 import java.util.ArrayList;
@@ -17,10 +19,21 @@ import java.util.Random;
  * @author Jeroen Roosen
  */
 public abstract class Ghost extends Unit {
+
+    /**
+     * Name of the sprite for scared ghost.
+     */
+    private static final String SCARED_GHOST_SRPITES_NAME = "vul_blue";
+
     /**
      * The sprite map, one sprite for each direction.
      */
     private final Map<Direction, Sprite> sprites;
+
+    /**
+     * The sprite
+     */
+    private final Map<Direction, Sprite> scaredGhostSprites;
 
     /**
      * The base move interval of the ghost.
@@ -33,6 +46,11 @@ public abstract class Ghost extends Unit {
     private final int intervalVariation;
 
     /**
+     * True if the ghost is afraid.
+     */
+    private boolean isScared;
+
+    /**
      * Calculates the next move for this unit and returns the direction to move
      * in.
      * <p>
@@ -42,6 +60,9 @@ public abstract class Ghost extends Unit {
      * be devised.
      */
     public Direction nextMove() {
+        if(this.isScared){
+            return this.randomMove();
+        }
         return nextAiMove().orElseGet(this::randomMove);
     }
 
@@ -62,13 +83,20 @@ public abstract class Ghost extends Unit {
      */
     protected Ghost(Map<Direction, Sprite> spriteMap, int moveInterval, int intervalVariation) {
         this.sprites = spriteMap;
+        this.scaredGhostSprites = new PacManSprites().getGhostSprite(SCARED_GHOST_SRPITES_NAME);
         this.intervalVariation = intervalVariation;
         this.moveInterval = moveInterval;
+
+        this.isScared = false;
     }
 
     @Override
     public Sprite getSprite() {
-        return sprites.get(getDirection());
+        if(this.isScared){
+            return scaredGhostSprites.get(getDirection());
+        }else{
+            return sprites.get(getDirection());
+        }
     }
 
     /**
@@ -77,7 +105,11 @@ public abstract class Ghost extends Unit {
      * @return The suggested delay between moves in milliseconds.
      */
     public long getInterval() {
-        return this.moveInterval + new Random().nextInt(this.intervalVariation);
+        int multiplicator = 1;
+        if(this.isScared){
+            multiplicator = 2;
+        }
+        return (this.moveInterval + new Random().nextInt(this.intervalVariation)) * multiplicator;
     }
 
     /**
@@ -100,4 +132,27 @@ public abstract class Ghost extends Unit {
         int i = new Random().nextInt(directions.size());
         return directions.get(i);
     }
+
+    /**
+     *
+     * @return true if the ghost is the ghost is scared, else false.
+     */
+    public boolean isScared(){
+        return this.isScared;
+    }
+
+    /**
+     *
+     * @param isScared true to make the ghost scare, else false.
+     */
+    public void setScared(boolean isScared){
+        this.isScared = isScared;
+    }
+
+    @Override
+    public void respawn(){
+        super.respawn();
+        this.setScared(false);
+    }
+
 }

@@ -1,12 +1,7 @@
 package nl.tudelft.jpacman.level;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +20,11 @@ import nl.tudelft.jpacman.npc.Ghost;
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public class Level {
+
+    private static final int NPC_STARTER_INTERVAL_DIVIDER = 2;
+
+    private static final int FIRST_STEP_SCARING_TIME = 7;
+    private static final int SECOND_STEP_SCARING_TIME = 5;
 
     /**
      * The board of this level.
@@ -79,6 +79,21 @@ public class Level {
     private final Set<LevelObserver> observers;
 
     /**
+     * The level of scaring 0 - 3. 5 seconds for 0-1 and 7 seconds for 2-3.
+     */
+    private int scaringLevel;
+
+    /**
+     * The time left that ghosts are afraid.
+     */
+    private int scaringTimeLeft;
+
+    /**
+     * The timer which manages the time left for the scaring level.
+     */
+    private Timer scaringTimer;
+
+    /**
      * Creates a new level for the board.
      *
      * @param board
@@ -107,6 +122,8 @@ public class Level {
         this.players = new ArrayList<>();
         this.collisions = collisionMap;
         this.observers = new HashSet<>();
+
+        this.scaringTimer = new Timer();
     }
 
     /**
@@ -147,6 +164,7 @@ public class Level {
         players.add(player);
         Square square = startSquares.get(startSquareIndex);
         player.occupy(square);
+        player.setSpawnSquare(square);
         startSquareIndex++;
         startSquareIndex %= startSquares.size();
     }
@@ -231,7 +249,7 @@ public class Level {
             ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
             service.schedule(new NpcMoveTask(service, npc),
-                npc.getInterval() / 2, TimeUnit.MILLISECONDS);
+                npc.getInterval() / NPC_STARTER_INTERVAL_DIVIDER, TimeUnit.MILLISECONDS);
 
             npcs.put(npc, service);
         }
@@ -310,6 +328,70 @@ public class Level {
         }
         assert pellets >= 0;
         return pellets;
+    }
+
+    /**
+     *
+     * @return true if at least of ghost is scared.
+     */
+    public boolean areGhostsScared(){
+        return this.scaringTimeLeft > 0;
+    }
+
+    /**
+     * Make all ghost of the level scared.
+     */
+    public void scareGhosts(){
+        for(Ghost ghost : this.npcs.keySet()){
+            ghost.setScared(true);
+        }
+        this.setScaringTimeLeft();
+        this.setScaringTimer();
+        this.scaringLevel++;
+    }
+
+    /**
+     * Make all ghost unscared.
+     */
+    public void unscareGhosts(){
+        for(Ghost ghost : this.npcs.keySet()){
+            ghost.setScared(false);
+        }
+        for(Player player : this.players){
+            player.resetPredatorMod();
+        }
+    }
+
+    /**
+     * Compute and set the time that Ghost are afraid.
+     */
+    private void setScaringTimeLeft(){
+        if(this.scaringLevel < 2){
+            this.scaringTimeLeft = FIRST_STEP_SCARING_TIME;
+        }else if(this.scaringLevel < 4){
+            if(this.scaringTimeLeft < SECOND_STEP_SCARING_TIME){
+                this.scaringTimeLeft = SECOND_STEP_SCARING_TIME;
+            }
+        }else{
+            this.scaringTimeLeft = 0;
+        }
+    }
+
+    /**
+     * Check if the timer should start or no.
+     */
+    private void setScaringTimer(){
+        this.scaringTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(scaringTimeLeft > 0){
+                    scaringTimeLeft--;
+                    setScaringTimer();
+                }else{
+                    unscareGhosts();
+                }
+            }
+        }, 1000L);
     }
 
     /**

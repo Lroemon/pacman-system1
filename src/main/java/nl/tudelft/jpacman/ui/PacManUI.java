@@ -47,6 +47,11 @@ public class PacManUI extends JFrame {
     private final ScorePanel scorePanel;
 
     /**
+     * The panel displaying starts as life left and timer.
+     */
+    private final LevelStatsPanel levelStatsPanel;
+
+    /**
      * The panel displaying the game.
      */
     private final BoardPanel boardPanel;
@@ -85,12 +90,21 @@ public class PacManUI extends JFrame {
             scorePanel.setScoreFormatter(scoreFormatter);
         }
 
+        levelStatsPanel = new LevelStatsPanel(game.getLevel());
+
         boardPanel = new BoardPanel(game);
 
+        Container northContentPanel = new Container();
         Container contentPanel = getContentPane();
+
+        northContentPanel.setLayout(new BorderLayout());
         contentPanel.setLayout(new BorderLayout());
+
+        northContentPanel.add(levelStatsPanel, BorderLayout.NORTH);
+        northContentPanel.add(scorePanel, BorderLayout.CENTER);
+
         contentPanel.add(buttonPanel, BorderLayout.SOUTH);
-        contentPanel.add(scorePanel, BorderLayout.NORTH);
+        contentPanel.add(northContentPanel, BorderLayout.NORTH);
         contentPanel.add(boardPanel, BorderLayout.CENTER);
 
         pack();
