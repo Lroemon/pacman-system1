@@ -36,7 +36,7 @@ public class MapParser {
     /**
      * The map with all square builders.
      */
-    private final Map<Character, SquareBuilder> squareBuilders = getSquareBuilders();
+    private final Map<Character, ISquareBuilder> squareBuilders = getSquareBuilders();
 
     /**
      * Creates a new map parser.
@@ -51,8 +51,8 @@ public class MapParser {
         this.boardCreator = boardFactory;
     }
 
-    private Map<Character, SquareBuilder> getSquareBuilders(){
-        Map<Character, SquareBuilder> squareBuilders = new HashMap<Character, SquareBuilder>();
+    private Map<Character, ISquareBuilder> getSquareBuilders(){
+        Map<Character, ISquareBuilder> squareBuilders = new HashMap<Character, ISquareBuilder>();
 
         squareBuilders.put(' ', new ADefaultSquareBuilder() {
             @Override
@@ -219,7 +219,7 @@ public class MapParser {
         char c = addSquareParameters.c;
         List<Ghost> ghosts = addSquareParameters.ghosts;
 
-        SquareBuilder builder = this.squareBuilders.getOrDefault(c, null);
+        ISquareBuilder builder = this.squareBuilders.getOrDefault(c, null);
         if(builder == null){
             throw new PacmanConfigurationException("Invalid character at "
                 + x + "," + y + ": " + c);
@@ -355,11 +355,11 @@ public class MapParser {
     /**
      * Interface to generate board game element from character
      */
-    public interface SquareBuilder{
+    public interface ISquareBuilder{
         void buildSquare(AddSquareParameters addSquareParameters);
     }
 
-    private abstract class ADefaultSquareBuilder implements SquareBuilder{
+    private abstract class ADefaultSquareBuilder implements ISquareBuilder{
         private Square[][] grid;
         private List<Ghost> ghosts;
         private List<Square> startPositions;
