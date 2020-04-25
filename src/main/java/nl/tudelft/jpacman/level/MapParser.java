@@ -147,6 +147,17 @@ public class MapParser {
             }
         });
 
+        // Here are parsed characters for Special Boxes/Fruits
+
+        squareBuilders.put('p', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createPepperPellet().occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
         return squareBuilders;
     }
 

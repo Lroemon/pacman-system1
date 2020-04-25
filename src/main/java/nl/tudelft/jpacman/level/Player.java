@@ -18,6 +18,11 @@ public class Player extends Unit {
     private static final int KILLING_GHOST_BASE_SCORE = 200;
 
     /**
+     * Number of tiles moved per seconde. From https://www.slideshare.net/grimlockt/pac-man-6561257 slide 48
+     */
+    private static final float PLAYER_SPEED = 10f;
+
+    /**
      * The amount of points accumulated by this player.
      */
     private int score;
@@ -48,6 +53,17 @@ public class Player extends Unit {
     private int predatorModeKillNumber;
 
     /**
+     * Speed of the player by tile per second.
+     */
+    private final float speed = PLAYER_SPEED;
+
+    /**
+     * Speed modifier for new features. The value is assessed by newSpeed = speed * speedModifier.
+     */
+    private float speedModifier;
+
+
+    /**
      * Creates a new player with a score of 0 points.
      *
      * @param spriteMap
@@ -59,6 +75,7 @@ public class Player extends Unit {
         this.score = 0;
         this.alive = true;
         this.life = 1;
+        this.speedModifier = 1f;
         this.sprites = spriteMap;
         this.deathSprite = deathAnimation;
         deathSprite.setAnimating(false);
@@ -169,4 +186,32 @@ public class Player extends Unit {
     public void addPoints(int points) {
         score += points;
     }
+
+    /**
+     *
+     * @return true if the speed modifier can be edited, else fase.
+     */
+    public boolean setSpeedModifier(float speedModifier){
+        if(Math.abs(speedModifier) < 1e-10){
+            return false;
+        }
+        this.speedModifier = speedModifier;
+        return true;
+    }
+
+    /**
+     * Reset the {@link #speedModifier} to 1 (no modification on regular speed)
+     */
+    public void resetSpeedModifier(){
+        this.speedModifier = 1f;
+    }
+
+    /**
+     *
+     * @return the speed of the player.
+     */
+    public float getSpeed(){
+        return this.speed * this.speedModifier;
+    }
+
 }

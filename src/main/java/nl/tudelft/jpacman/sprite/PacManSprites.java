@@ -149,6 +149,12 @@ public class PacManSprites extends SpriteStore {
     public Sprite getPowerPelletSprite(){
         return loadSprite("/sprite/power_pellet.png"); }
 
+    // Sprites for special boxes/fruits
+
+    public Sprite getPepperPelletSprite(){
+        return loadSprite("/sprite/pepper.png");
+    }
+
     /**
      * Overloads the default sprite loading, ignoring the exception. This class
      * assumes all sprites are provided, hence the exception will be thrown as a

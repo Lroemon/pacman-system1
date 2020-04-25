@@ -14,11 +14,6 @@ import java.util.TimerTask;
 public class PlayerController{
 
     /**
-     * Number of tiles moved per seconde. From https://www.slideshare.net/grimlockt/pac-man-6561257 slide 48
-     */
-    private static final float PLAYER_SPEED = 10f;
-
-    /**
      * Game where the player is.
      */
     private final Game game;
@@ -26,15 +21,6 @@ public class PlayerController{
      * Player that controller controls.
      */
     private final Player player;
-    /**
-     * Speed of the player by tile per second.
-     */
-    private final float speed;
-
-    /**
-     * Speed modifier for new features. The value is assessed by newSpeed = speed * speedModifier.
-     */
-    private float speedModifier;
 
     /**
      * Direction of the player movement.
@@ -59,8 +45,6 @@ public class PlayerController{
     public PlayerController(Game game, Player player){
         this.game = game;
         this.player = player;
-        this.speed = PLAYER_SPEED;
-        this.speedModifier = 1f;
 
         this.currentDirection = null;
 
@@ -73,26 +57,6 @@ public class PlayerController{
      */
     public void setDirection(Direction newDirection){
         this.currentDirection = newDirection;
-    }
-
-    /**
-     *
-     * @return the speed of the player.
-     */
-    public float getSpeed(){
-        return this.speed * this.speedModifier;
-    }
-
-    /**
-     *
-     * @return true if the speed modifier can be edited, else fase.
-     */
-    public boolean setSpeedModifier(float speedModifier){
-        if(Math.abs(speedModifier) < 1e-10){
-            return false;
-        }
-        this.speedModifier = speedModifier;
-        return true;
     }
 
     /**
@@ -121,7 +85,7 @@ public class PlayerController{
      * @return the time in milliseconds before the next moving step;
      */
     private long getNextStepTime(){
-        return (long)( 1000L / this.getSpeed());
+        return (long)( 1000L / this.player.getSpeed());
     }
 
     /**

@@ -394,6 +394,10 @@ public class Level {
         }, 1000L);
     }
 
+    public float getScaringTimeLeft(){
+        return this.scaringTimeLeft;
+    }
+
     /**
      * A task that moves an NPC and reschedules itself after it finished.
      *

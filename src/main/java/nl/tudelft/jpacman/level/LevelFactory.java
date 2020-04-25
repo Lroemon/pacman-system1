@@ -139,6 +139,12 @@ public class LevelFactory {
         return new FruitPellet(PELLET_VALUE, sprites.loadSprite(fruit.spritePath));
     }
 
+    // Special Pellets
+
+    public PepperPellet createPepperPellet(){
+        return new PepperPellet(PELLET_VALUE, sprites.getPepperPelletSprite());
+    }
+
     /**
      * Implementation of an NPC that wanders around randomly.
      *
