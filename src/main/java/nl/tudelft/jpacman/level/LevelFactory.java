@@ -141,8 +141,19 @@ public class LevelFactory {
 
     // Special Pellets
 
+    /**
+     * @return a Pepper pellet with special effect when eaten by Pacman (see {@link PepperPellet})
+     */
     public PepperPellet createPepperPellet(){
         return new PepperPellet(PELLET_VALUE, sprites.getPepperPelletSprite());
+    }
+
+
+    /**
+     * @return a Tomato pellet with special effect when eaten by Pacman (see {@link TomatoPellet})
+     */
+    public TomatoPellet createTomatoPellet(){
+        return new TomatoPellet(PELLET_VALUE, sprites.getTomatoPelletSprite());
     }
 
     /**

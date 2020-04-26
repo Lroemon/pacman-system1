@@ -1,11 +1,18 @@
 package nl.tudelft.jpacman.level;
 
+import nl.tudelft.jpacman.board.Direction;
+import nl.tudelft.jpacman.sprite.PacManSprites;
 import nl.tudelft.jpacman.sprite.Sprite;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
 
-public class PepperPellet extends Pellet {
+/**
+ * A Pepper pellet ({@link SpecialPellet}) is a positive bonus that increases pacman's speed when eaten, with variation
+ * considering the current state of the level.
+ * It is based on score, a player that already scored should deserve a better speed bonus to reach still unexplored
+ * labyrinth areas !
+ */
+public class PepperPellet extends SpecialPellet {
 
     public static final float BASIC_SPEED_FACTOR = 1.8f;
     public static final float INCREASED_SPEED_FACTOR = 2.5f;
@@ -14,7 +21,8 @@ public class PepperPellet extends Pellet {
     public static final long BASIC_DURATION = 3000L;
     public static final long INCREASED_DURATION = 5000L;
 
-    private Timer timer;
+    private static final Map<Direction, Sprite> pacmanSprites = new PacManSprites().getPacmanPepperSprites();
+
 
     /**
      * Creates a new pellet.
@@ -24,32 +32,18 @@ public class PepperPellet extends Pellet {
      */
     public PepperPellet(int points, Sprite sprite) {
         super(points, sprite);
-        this.timer = new Timer();
     }
 
     @Override
     public void onEat(Level level, Player player){
         super.onEat(level, player);
+        long duration = player.getScore() > SCORE_THRESH_DURATION ? INCREASED_DURATION : BASIC_DURATION;
         if (level.areGhostsScared())
             player.setSpeedModifier(INCREASED_SPEED_FACTOR);
         else
             player.setSpeedModifier(BASIC_SPEED_FACTOR);
-        long duration = player.getScore() > SCORE_THRESH_DURATION ? INCREASED_DURATION : BASIC_DURATION;
-        this.timer.schedule(new StopPepperEffect(player), duration);
+        setNewStatePlayer(player, Player.SpecialStates.ON_PEPPER, pacmanSprites);
+        scheduleEffectDuration(player, duration);
     }
 
-    private class StopPepperEffect extends TimerTask {
-
-        private final Player player;
-
-        public StopPepperEffect(Player player){
-            super();
-            this.player = player;
-        }
-
-        @Override
-        public void run() {
-            player.resetSpeedModifier();
-        }
-    }
 }

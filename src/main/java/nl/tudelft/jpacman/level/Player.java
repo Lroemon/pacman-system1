@@ -28,16 +28,6 @@ public class Player extends Unit {
     private int score;
 
     /**
-     * The animations for every direction.
-     */
-    private final Map<Direction, Sprite> sprites;
-
-    /**
-     * The animation that is to be played when Pac-Man dies.
-     */
-    private final AnimatedSprite deathSprite;
-
-    /**
      * <code>true</code> iff this player is alive.
      */
     private boolean alive;
@@ -62,6 +52,22 @@ public class Player extends Unit {
      */
     private float speedModifier;
 
+    /**
+     * A current special state among {@link SpecialStates} enumeration, influences
+     * diverse game rules depending bonus/penalty effect related to this state
+     */
+    private SpecialStates specState;
+
+    /**
+     * The animations for every direction, storing the original one.
+     */
+    private Map<Direction, Sprite> sprites, basic_sprite;
+
+    /**
+     * The animation that is to be played when Pac-Man dies.
+     */
+    private final AnimatedSprite deathSprite;
+
 
     /**
      * Creates a new player with a score of 0 points.
@@ -76,7 +82,9 @@ public class Player extends Unit {
         this.alive = true;
         this.life = 1;
         this.speedModifier = 1f;
+        this.specState = SpecialStates.NONE;
         this.sprites = spriteMap;
+        this.basic_sprite = spriteMap;
         this.deathSprite = deathAnimation;
         deathSprite.setAnimating(false);
 
@@ -168,6 +176,24 @@ public class Player extends Unit {
         return score;
     }
 
+    /**
+     * Set new sprites to use for Pacman.
+     * @param sprites the new Sprites considering each {@link Direction} possible.
+     */
+    public void setSprite(Map<Direction, Sprite> sprites) {
+        this.sprites = sprites;
+    }
+
+    /**
+     * Reset the current Pacman sprite to the one used originally when instantiated
+     */
+    public void resetSprite(){
+        this.sprites = this.basic_sprite;
+    }
+
+    /**
+     * Get current sprite used to display Pacman.
+     */
     @Override
     public Sprite getSprite() {
         if (isAlive()) {
@@ -189,7 +215,7 @@ public class Player extends Unit {
 
     /**
      *
-     * @return true if the speed modifier can be edited, else fase.
+     * @return true if the speed modifier can be edited, else false.
      */
     public boolean setSpeedModifier(float speedModifier){
         if(Math.abs(speedModifier) < 1e-10){
@@ -200,7 +226,7 @@ public class Player extends Unit {
     }
 
     /**
-     * Reset the {@link #speedModifier} to 1 (no modification on regular speed)
+     * Reset the {@link #speedModifier} to 1 (no modification on regular speed).
      */
     public void resetSpeedModifier(){
         this.speedModifier = 1f;
@@ -212,6 +238,51 @@ public class Player extends Unit {
      */
     public float getSpeed(){
         return this.speed * this.speedModifier;
+    }
+
+    /**
+     * Get the current special state {@link SpecialStates}.
+     * @return the current special state with {@link SpecialStates#NONE} meaning no special state currently applied.
+     */
+    public SpecialStates getSpecialState() {
+        return this.specState;
+    }
+
+    /**
+     * @return whether there is a currently special state applied (so not {@link SpecialStates#NONE}).
+     */
+    public boolean isOnSpecialState() {
+        return this.specState != SpecialStates.NONE;
+    }
+
+    /**
+     * @param testState state to check against current one.
+     * @return whether the current special state is the one given.
+     */
+    public boolean isOnSpecialState(SpecialStates testState) {
+        return this.specState == testState;
+    }
+
+    /**
+     * Change the current special state
+     * @param specialState
+     */
+    public void setSpecialState(SpecialStates specialState) {
+        this.specState = specialState;
+    }
+
+    /**
+     * Reset the current special state to {@link SpecialStates#NONE} meaning no state applied.
+     */
+    public void resetSpecialState() {
+        this.specState = SpecialStates.NONE;
+    }
+
+    /**
+     * Possible special states applicable to Pacman, taking in account in diverse game rules (bonuses/penalties).
+     */
+    public enum SpecialStates {
+        NONE, ON_PEPPER, ON_TOMATO, ON_BEAN, ON_POTATO, ON_FISH
     }
 
 }

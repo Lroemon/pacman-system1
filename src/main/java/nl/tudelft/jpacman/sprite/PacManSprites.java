@@ -58,6 +58,15 @@ public class PacManSprites extends SpriteStore {
         return directionSprite("/sprite/pacman.png", PACMAN_ANIMATION_FRAMES);
     }
 
+    // Special sprites for Pacman when he's on a special state (extension)
+    public Map<Direction, Sprite> getPacmanPepperSprites() {
+        return directionSprite("/sprite/pacman_pepper.png", PACMAN_ANIMATION_FRAMES);
+    }
+
+    public Map<Direction, Sprite> getPacmanTomatoSprites() {
+        return directionSprite("/sprite/pacman_tomato.png", PACMAN_ANIMATION_FRAMES);
+    }
+
     /**
      * @return The animation of a dying Pac-Man.
      */
@@ -153,6 +162,10 @@ public class PacManSprites extends SpriteStore {
 
     public Sprite getPepperPelletSprite(){
         return loadSprite("/sprite/pepper.png");
+    }
+
+    public Sprite getTomatoPelletSprite(){
+        return loadSprite("/sprite/tomato.png");
     }
 
     /**

@@ -43,7 +43,11 @@ public class DefaultPlayerInteractionMap implements CollisionMap {
                 if(ghost.isScared()){
                     player.addPoints(player.killGhost(ghost));
                 }else{
-                    player.setAlive(false);
+                    boolean killPlayer = true;
+                    // Collisions related to special states (extension fruits)
+                    if (player.isOnSpecialState(Player.SpecialStates.ON_TOMATO))
+                        killPlayer = false;
+                    player.setAlive(!killPlayer);
                 }
             });
 
