@@ -69,4 +69,16 @@ public enum Direction {
     public int getDeltaY() {
         return deltaY;
     }
+
+    public static boolean isVerticalAlign(Direction d){
+        return d == NORTH || d == SOUTH;
+    }
+
+    public static boolean isHorizontalAlign(Direction d){
+        return d == WEST || d == EAST;
+    }
+
+    public static boolean areOnSameAlign(Direction d1, Direction d2){
+        return (isHorizontalAlign(d1) && isHorizontalAlign(d2)) || (isVerticalAlign(d1) && isVerticalAlign(d2));
+    }
 }

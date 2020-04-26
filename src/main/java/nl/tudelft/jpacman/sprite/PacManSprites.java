@@ -180,6 +180,13 @@ public class PacManSprites extends SpriteStore {
         return isLinked ? loadSprite("/sprite/teleporter.png") : loadSprite("/sprite/teleporter2.png");
     }
 
+    public Sprite getBridgeBox(Direction direction){
+        if (direction == Direction.NORTH || direction == Direction.SOUTH)
+            return loadSprite("/sprite/bridge_horiz.png");
+        else
+            return loadSprite("/sprite/bridge_vert.png");
+    }
+
     public Sprite getGrenadePelletSprite(){
         return loadSprite("/sprite/grenade.png");
     }

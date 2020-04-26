@@ -12,6 +12,7 @@ import java.util.Map;
 import nl.tudelft.jpacman.PacmanConfigurationException;
 import nl.tudelft.jpacman.board.Board;
 import nl.tudelft.jpacman.board.BoardFactory;
+import nl.tudelft.jpacman.board.Direction;
 import nl.tudelft.jpacman.board.Square;
 import nl.tudelft.jpacman.npc.Ghost;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -163,6 +164,24 @@ public class MapParser {
             protected Square getSquare() {
                 Square boxSquare = boardCreator.createGround();
                 levelCreator.createTeleporterBox().occupy(boxSquare);
+                return boxSquare;
+            }
+        });
+
+        squareBuilders.put('|', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square boxSquare = boardCreator.createGround();
+                levelCreator.createBridgeBox(Direction.NORTH).occupy(boxSquare);
+                return boxSquare;
+            }
+        });
+
+        squareBuilders.put('-', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square boxSquare = boardCreator.createGround();
+                levelCreator.createBridgeBox(Direction.WEST).occupy(boxSquare);
                 return boxSquare;
             }
         });

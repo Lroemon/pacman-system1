@@ -3,6 +3,8 @@ package nl.tudelft.jpacman.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -113,7 +115,10 @@ class BoardPanel extends JPanel {
      */
     private void render(Square square, Graphics graphics, int x, int y, int width, int height) {
         square.getSprite().draw(graphics, x, y, width, height);
-        for (Unit unit : square.getOccupants()) {
+        List<Unit> ordered = square.getGraphicalOrderedOccupants();
+        if(ordered.size() > 1)
+        System.out.println(ordered);
+        for (Unit unit: ordered) {
             unit.getSprite().draw(graphics, x, y, width, height);
         }
     }

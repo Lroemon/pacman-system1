@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
+import nl.tudelft.jpacman.level.BridgeBox;
+import nl.tudelft.jpacman.level.SpecialBox;
 import nl.tudelft.jpacman.sprite.Sprite;
 /**
  * A square on a {@link Board}, which can (or cannot, depending on the type) be
@@ -72,6 +74,41 @@ public abstract class Square {
     }
 
     /**
+     * @return the list of occupants ordered with special boxes in first (as collisions should handle bridges first)
+     */
+    public List<Unit> getOrderedOccupants(){
+        ArrayList<Unit> boxes = new ArrayList<>();
+        ArrayList<Unit> others = new ArrayList<>();
+        for(Unit unit: this.occupants){
+            if (unit instanceof SpecialBox)
+                boxes.add(unit);
+            else
+                others.add(unit);
+        }
+        boxes.addAll(others);
+        return boxes;
+    }
+
+    public List<Unit> getGraphicalOrderedOccupants(){
+        ArrayList<Unit> boxes = new ArrayList<>();
+        ArrayList<Unit> down = new ArrayList<>();
+        ArrayList<Unit> up = new ArrayList<>();
+        for(Unit unit: this.occupants){
+            if (unit instanceof SpecialBox)
+                boxes.add(unit);
+            else {
+                if (unit.getVerticalPosition() == Unit.VerticalPos.UP)
+                    down.add(unit);
+                else
+                    up.add(unit);
+            }
+        }
+        down.addAll(boxes);
+        down.addAll(up);
+        return down;
+    }
+
+    /**
      * Adds a new occupant to this square.
      *
      * @param occupant
@@ -119,6 +156,20 @@ public abstract class Square {
      * @return <code>true</code> iff the unit is allowed to occupy this square.
      */
     public abstract boolean isAccessibleTo(Unit unit);
+
+    public boolean canLeaveByDirection(Unit unit, Direction intendedDir){
+        for (Unit b: this.occupants){
+            if (b instanceof BridgeBox){
+                BridgeBox bridge = (BridgeBox) b;
+                BridgeBox.Align alignUnit = bridge.getAlignForLevel(unit);
+                if (alignUnit == BridgeBox.Align.HORIZONTAL && Direction.isVerticalAlign(intendedDir))
+                    return false;
+                if (alignUnit == BridgeBox.Align.VERTICAL && Direction.isHorizontalAlign(intendedDir))
+                    return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Returns the sprite of this square.

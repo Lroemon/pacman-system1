@@ -169,6 +169,10 @@ public class LevelFactory {
         return newTp;
     }
 
+    public BridgeBox createBridgeBox(Direction direction){
+        return new BridgeBox(direction, sprites.getBridgeBox(direction));
+    }
+
     // Special Pellets
 
     /**

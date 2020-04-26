@@ -200,13 +200,20 @@ public class Level {
         synchronized (moveLock) {
             unit.setDirection(direction);
             Square location = unit.getSquare();
+            if (!location.canLeaveByDirection(unit, direction))
+                return;
+
             Square destination = location.getSquareAt(direction);
 
             if (destination.isAccessibleTo(unit)) {
-                List<Unit> occupants = destination.getOccupants();
+                // Special boxes first to handle arriving on a bridge that changes vertical level
+                List<Unit> occupants = destination.getOrderedOccupants();
                 unit.occupy(destination);
+                // Units that could set vertical pos for collision treatment will be treated first to UP unit if needed
+                unit.setVerticalPosition(Unit.VerticalPos.DOWN);
                 for (Unit occupant : occupants) {
-                    collisions.collide(unit, occupant);
+                    if (unit.getVerticalPosition() == occupant.getVerticalPosition())
+                        collisions.collide(unit, occupant);
                 }
             }
             updateObservers();

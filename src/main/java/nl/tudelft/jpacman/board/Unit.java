@@ -26,6 +26,11 @@ public abstract class Unit {
     private Direction direction;
 
     /**
+     * The vertical level where the unit sits
+     */
+    private VerticalPos verticalPos;
+
+    /**
      * A checked boolean indicating whether {@link Level#move(Unit, Direction)} will really perform the move
      */
     private boolean isMovable;
@@ -36,6 +41,7 @@ public abstract class Unit {
     protected Unit() {
         this.direction = Direction.EAST;
         this.isMovable = true;
+        this.verticalPos = VerticalPos.DOWN;
     }
 
     /**
@@ -52,6 +58,21 @@ public abstract class Unit {
      */
     public Direction getDirection() {
         return this.direction;
+    }
+
+    /**
+     * Set the new vertical level the unit sits on.
+     * @param verticalPos the new level
+     */
+    public void setVerticalPosition(VerticalPos verticalPos){
+        this.verticalPos = verticalPos;
+    }
+
+    /**
+     * @return the current vertical level.
+     */
+    public VerticalPos getVerticalPosition(){
+        return this.verticalPos;
     }
 
     /**
@@ -172,5 +193,14 @@ public abstract class Unit {
             this.leaveSquare();
             this.occupy(this.spawnSquare);
         }
+    }
+
+
+    /**
+     * Stands for being at level 0 or 1 of the square, mechanic introduced by Bridges Special Box
+     * ({@link nl.tudelft.jpacman.level.BridgeBox}).
+     */
+    public enum VerticalPos {
+        UP, DOWN;
     }
 }
