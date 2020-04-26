@@ -158,6 +158,15 @@ public class MapParser {
             }
         });
 
+        squareBuilders.put('o', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square boxSquare = boardCreator.createGround();
+                levelCreator.createTeleporterBox().occupy(boxSquare);
+                return boxSquare;
+            }
+        });
+
         squareBuilders.put('g', new ADefaultSquareBuilder() {
             @Override
             protected Square getSquare() {

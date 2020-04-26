@@ -1,5 +1,6 @@
 package nl.tudelft.jpacman.level;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -52,6 +53,11 @@ public class LevelFactory {
     private final GhostFactory ghostFact;
 
     /**
+     * A list of teleporters fed as new one are instantiated, used to link them by pairs (two last ones each time)
+     */
+    private final ArrayList<TeleporterBox> teleporters;
+
+    /**
      * Creates a new level factory.
      *
      * @param spriteStore
@@ -63,6 +69,8 @@ public class LevelFactory {
         this.sprites = spriteStore;
         this.ghostIndex = -1;
         this.ghostFact = ghostFactory;
+
+        this.teleporters = new ArrayList<>();
     }
 
     /**
@@ -141,8 +149,24 @@ public class LevelFactory {
 
     // Special Boxes
 
+    /**
+     * @return a Trap that locks units for an amount of time (see {@link TrapBox}).
+     */
     public TrapBox createTrapBox(){
         return new TrapBox(sprites.getTrapBoxSprite());
+    }
+
+    /**
+     * @return a Teleporter that is paired with another one if possible (see {@link TeleporterBox}).
+     */
+    public TeleporterBox createTeleporterBox(){
+        TeleporterBox toLinkWith = null;
+        for (TeleporterBox t: this.teleporters){
+            toLinkWith = !t.isLinked() ? t : null;
+        }
+        TeleporterBox newTp = new TeleporterBox(toLinkWith, sprites.getTeleporterBox(toLinkWith != null));
+        this.teleporters.add(newTp);
+        return newTp;
     }
 
     // Special Pellets

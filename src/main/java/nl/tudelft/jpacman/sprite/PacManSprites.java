@@ -176,6 +176,10 @@ public class PacManSprites extends SpriteStore {
         return loadSprite("/sprite/trap.png");
     }
 
+    public Sprite getTeleporterBox(boolean isLinked){
+        return isLinked ? loadSprite("/sprite/teleporter.png") : loadSprite("/sprite/teleporter2.png");
+    }
+
     public Sprite getGrenadePelletSprite(){
         return loadSprite("/sprite/grenade.png");
     }
