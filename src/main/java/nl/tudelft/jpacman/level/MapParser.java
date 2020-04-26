@@ -149,6 +149,15 @@ public class MapParser {
 
         // Here are parsed characters for Special Boxes/Fruits
 
+        squareBuilders.put('x', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square boxSquare = boardCreator.createGround();
+                levelCreator.createTrapBox().occupy(boxSquare);
+                return boxSquare;
+            }
+        });
+
         squareBuilders.put('g', new ADefaultSquareBuilder() {
             @Override
             protected Square getSquare() {

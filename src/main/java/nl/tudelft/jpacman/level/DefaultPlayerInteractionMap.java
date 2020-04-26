@@ -56,6 +56,18 @@ public class DefaultPlayerInteractionMap implements CollisionMap {
                 pellet.onEat(level, player);
             });
 
+        // Special Boxes are different units
+
+        collisionMap.onCollision(Player.class, SpecialBox.class,
+            (unit, box) -> {
+                box.onTake(level, unit);
+            });
+
+        collisionMap.onCollision(Ghost.class, SpecialBox.class,
+            (unit, box) -> {
+                box.onTake(level, unit);
+            });
+
         return collisionMap;
     }
 }

@@ -139,6 +139,12 @@ public class LevelFactory {
         return new FruitPellet(PELLET_VALUE, sprites.loadSprite(fruit.spritePath));
     }
 
+    // Special Boxes
+
+    public TrapBox createTrapBox(){
+        return new TrapBox(sprites.getTrapBoxSprite());
+    }
+
     // Special Pellets
 
     /**
