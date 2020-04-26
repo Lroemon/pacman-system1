@@ -34,16 +34,24 @@ public class PepperPellet extends SpecialPellet {
         super(points, sprite);
     }
 
-    @Override
-    public void onEat(Level level, Player player){
-        super.onEat(level, player);
-        long duration = player.getScore() > SCORE_THRESH_DURATION ? INCREASED_DURATION : BASIC_DURATION;
+    private long getDuration(Player player) {
+        return player.getScore() > SCORE_THRESH_DURATION ? INCREASED_DURATION : BASIC_DURATION;
+    }
+
+    private void setPlayerSpeedModifier(Level level, Player player){
         if (level.areGhostsScared())
             player.setSpeedModifier(INCREASED_SPEED_FACTOR);
         else
             player.setSpeedModifier(BASIC_SPEED_FACTOR);
+    }
+
+    @Override
+    public void onEat(Level level, Player player){
+        super.onEat(level, player);
+        long duration = this.getDuration(player);
+        this.setPlayerSpeedModifier(level, player);
         setNewStatePlayer(player, Player.SpecialStates.ON_PEPPER, pacmanSprites);
-        scheduleEffectDuration(player, duration);
+        scheduleEffectDuration(player, duration); // the default reset at the end will reset speedModifier
     }
 
 }

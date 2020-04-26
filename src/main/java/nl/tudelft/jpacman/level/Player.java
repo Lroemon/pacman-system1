@@ -279,6 +279,15 @@ public class Player extends Unit {
     }
 
     /**
+     * Reset all can be dynamically set from special boxes/pellets
+     */
+    public void resetWholeState() {
+        this.resetSpecialState();
+        this.resetSprite();
+        this.resetSpeedModifier();
+    }
+
+    /**
      * Possible special states applicable to Pacman, taking in account in diverse game rules (bonuses/penalties).
      */
     public enum SpecialStates {

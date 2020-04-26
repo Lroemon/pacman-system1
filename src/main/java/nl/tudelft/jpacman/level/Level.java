@@ -331,6 +331,10 @@ public class Level {
         return pellets;
     }
 
+    public ArrayList<Ghost> getGhosts(){
+        return new ArrayList<>(this.npcs.keySet());
+    }
+
     /**
      *
      * @return true if at least of ghost is scared.

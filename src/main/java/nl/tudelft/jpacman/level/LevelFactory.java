@@ -155,8 +155,18 @@ public class LevelFactory {
         return new TomatoPellet(PELLET_VALUE, sprites.getTomatoPelletSprite());
     }
 
+    /**
+     * @return a Potato pellet with special negative effect when eaten by Pacman (see {@link PotatoPellet})
+     */
+    public PotatoPellet createPotatoPellet(){
+        return new PotatoPellet(PELLET_VALUE, sprites.getPotatoPelletSprite());
+    }
+
+    /**
+     * @return a Fish pellet with special effect when eaten by Pacman (see {@link FishPellet})
+     */
     public FishPellet createFishPellet() {
-        return new FishPellet(PELLET_VALUE, sprites.getFishSprite());
+        return new FishPellet(PELLET_VALUE, sprites.getFishPelletSprite());
     }
 
 

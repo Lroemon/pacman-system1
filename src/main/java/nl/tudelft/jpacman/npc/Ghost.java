@@ -41,6 +41,11 @@ public abstract class Ghost extends Unit {
     private final int moveInterval;
 
     /**
+     * A Multiplier applied to modify the resulting ghost speed
+     */
+    private float speedMultiplier;
+
+    /**
      * The random variation added to the {@link #moveInterval}.
      */
     private final int intervalVariation;
@@ -86,6 +91,7 @@ public abstract class Ghost extends Unit {
         this.scaredGhostSprites = new PacManSprites().getGhostSprite(SCARED_GHOST_SRPITES_NAME);
         this.intervalVariation = intervalVariation;
         this.moveInterval = moveInterval;
+        this.speedMultiplier = 1f;
 
         this.isScared = false;
     }
@@ -100,16 +106,36 @@ public abstract class Ghost extends Unit {
     }
 
     /**
+     * Set the Multiplier applied to modify the resulting ghost speed (multiply time between moves by the inverse).
+     * @param speedMultiplier the new speed Multiplier for this ghost (> 0).
+     */
+    public void setSpeedMultiplier(float speedMultiplier){
+        if (speedMultiplier <= 0)
+            throw new IllegalArgumentException("Ghost : the speed Multiplier should be > 0");
+        this.speedMultiplier = speedMultiplier;
+    }
+
+    public void resetSpeedMultiplier(){
+        this.speedMultiplier = 1f;
+    }
+
+    /**
+     * Get the Multiplier applied to modify the resulting ghost speed (multiply time between moves by the inverse).
+     * @return the current speed mutliplicator for this ghost
+     */
+    public float getSpeedMultiplier(){
+        return this.speedMultiplier;
+    }
+
+    /**
      * The time that should be taken between moves.
      *
      * @return The suggested delay between moves in milliseconds.
      */
     public long getInterval() {
-        int multiplicator = 1;
-        if(this.isScared){
-            multiplicator = 2;
-        }
-        return (this.moveInterval + new Random().nextInt(this.intervalVariation)) * multiplicator;
+        float speedToTime = 1 / this.speedMultiplier;
+        float baseTime = (float) this.moveInterval + new Random().nextInt(this.intervalVariation);
+        return (long) (baseTime * speedToTime);
     }
 
     /**
@@ -147,6 +173,7 @@ public abstract class Ghost extends Unit {
      */
     public void setScared(boolean isScared){
         this.isScared = isScared;
+        this.speedMultiplier = 0.5f; // ghost speed lowered
     }
 
     @Override

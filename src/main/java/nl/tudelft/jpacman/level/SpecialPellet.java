@@ -93,8 +93,7 @@ public class SpecialPellet extends Pellet {
          */
         @Override
         public void run() {
-            player.resetSpecialState();
-            player.resetSprite();
+            player.resetWholeState();
         }
     }
 }
