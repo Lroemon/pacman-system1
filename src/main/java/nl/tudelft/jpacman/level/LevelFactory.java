@@ -148,13 +148,17 @@ public class LevelFactory {
         return new PepperPellet(PELLET_VALUE, sprites.getPepperPelletSprite());
     }
 
-
     /**
      * @return a Tomato pellet with special effect when eaten by Pacman (see {@link TomatoPellet})
      */
     public TomatoPellet createTomatoPellet(){
         return new TomatoPellet(PELLET_VALUE, sprites.getTomatoPelletSprite());
     }
+
+    public FishPellet createFishPellet() {
+        return new FishPellet(PELLET_VALUE, sprites.getFishSprite());
+    }
+
 
     /**
      * Implementation of an NPC that wanders around randomly.

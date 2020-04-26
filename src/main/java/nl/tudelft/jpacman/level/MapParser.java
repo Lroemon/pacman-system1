@@ -167,6 +167,15 @@ public class MapParser {
             }
         });
 
+        squareBuilders.put('f', new ADefaultSquareBuilder() {
+            @Override
+            protected Square getSquare() {
+                Square pelletSquare = boardCreator.createGround();
+                levelCreator.createFishPellet().occupy(pelletSquare);
+                return pelletSquare;
+            }
+        });
+
         return squareBuilders;
     }
 

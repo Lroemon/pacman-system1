@@ -192,7 +192,8 @@ public class Level {
         assert direction != null;
         assert unit.hasSquare();
 
-        if (!isInProgress()) {
+        // added movable notion for extension
+        if (!isInProgress() || !unit.isMovable()) {
             return;
         }
 

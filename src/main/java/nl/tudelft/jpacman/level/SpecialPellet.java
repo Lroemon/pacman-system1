@@ -77,7 +77,7 @@ public class SpecialPellet extends Pellet {
      */
     protected class StopEffect extends TimerTask {
 
-        private final Player player;
+        protected final Player player;
 
         /**
          * @param player the Pacman on which the effect has been activated.

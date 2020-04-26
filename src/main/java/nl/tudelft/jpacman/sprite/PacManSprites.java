@@ -67,6 +67,10 @@ public class PacManSprites extends SpriteStore {
         return directionSprite("/sprite/pacman_tomato.png", PACMAN_ANIMATION_FRAMES);
     }
 
+    public Map<Direction, Sprite> getPacmanFishSprites() {
+        return directionSprite("/sprite/pacman_fish.png", PACMAN_ANIMATION_FRAMES);
+    }
+
     /**
      * @return The animation of a dying Pac-Man.
      */
@@ -166,6 +170,10 @@ public class PacManSprites extends SpriteStore {
 
     public Sprite getTomatoPelletSprite(){
         return loadSprite("/sprite/tomato.png");
+    }
+
+    public Sprite getFishSprite(){
+        return loadSprite("/sprite/fish.png");
     }
 
     /**

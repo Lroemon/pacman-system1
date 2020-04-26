@@ -1,5 +1,6 @@
 package nl.tudelft.jpacman.board;
 
+import nl.tudelft.jpacman.level.Level;
 import nl.tudelft.jpacman.sprite.Sprite;
 
 /**
@@ -25,10 +26,16 @@ public abstract class Unit {
     private Direction direction;
 
     /**
+     * A checked boolean indicating whether {@link Level#move(Unit, Direction)} will really perform the move
+     */
+    private boolean isMovable;
+
+    /**
      * Creates a unit that is facing east.
      */
     protected Unit() {
         this.direction = Direction.EAST;
+        this.isMovable = true;
     }
 
     /**
@@ -45,6 +52,23 @@ public abstract class Unit {
      */
     public Direction getDirection() {
         return this.direction;
+    }
+
+    /**
+     * Is this unity movable to another square.
+     * @see Level#move(Unit, Direction)
+     * @return whether this unity can be moved.
+     */
+    public boolean isMovable(){
+        return this.isMovable;
+    }
+
+    /**
+     * Set whether this unity is movable to another square.
+     * @param movable whether this unity is movable to another square.
+     */
+    public void setMovable(boolean movable){
+        this.isMovable = movable;
     }
 
     /**

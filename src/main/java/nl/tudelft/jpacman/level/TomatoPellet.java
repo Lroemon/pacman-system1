@@ -34,7 +34,7 @@ public class TomatoPellet extends SpecialPellet {
     public void onEat(Level level, Player player){
         super.onEat(level, player);
         long duration = player.getLifeLeft() > LIFE_THRESH_DURATION ? BASIC_DURATION : INCREASED_DURATION;
-        setNewStatePlayer(player, Player.SpecialStates.ON_TOMATO, pacmanSprites);
+        setNewStatePlayer(player, Player.SpecialStates.ON_TOMATO, pacmanSprites); // collisions take this state into account
         scheduleEffectDuration(player, duration);
     }
 
