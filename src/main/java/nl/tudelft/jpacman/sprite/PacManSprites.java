@@ -172,6 +172,10 @@ public class PacManSprites extends SpriteStore {
 
     // Sprites for special boxes/fruits
 
+    public Sprite getGrenadePelletSprite(){
+        return loadSprite("/sprite/grenade.png");
+    }
+
     public Sprite getPepperPelletSprite(){
         return loadSprite("/sprite/pepper.png");
     }

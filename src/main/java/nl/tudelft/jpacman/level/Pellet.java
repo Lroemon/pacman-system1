@@ -26,6 +26,7 @@ public class Pellet extends Unit {
      * @param sprite The sprite of this pellet.
      */
     public Pellet(int points, Sprite sprite) {
+        super.setMovable(false);
         this.image = sprite;
         this.value = points;
     }
