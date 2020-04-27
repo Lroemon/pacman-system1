@@ -6,6 +6,10 @@ import nl.tudelft.jpacman.sprite.Sprite;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * A Trap is a special box acting as a penalty when any unit walks on it.
+ * It locks the unit on the square for a certain amount of time.
+ */
 public class TrapBox extends SpecialBox {
 
     public static final long BASE_WAITING_TIME = 2000L;

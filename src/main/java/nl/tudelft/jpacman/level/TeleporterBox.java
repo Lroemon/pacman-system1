@@ -27,6 +27,15 @@ public class TeleporterBox extends SpecialBox {
     }
 
     /**
+     * Instantiate a Teleporter not linked to another for now (so will have no effect).
+     * @see TeleporterBox#TeleporterBox(TeleporterBox, Sprite)
+     * @param sprite
+     */
+    public TeleporterBox(Sprite sprite){
+        this(null, sprite);
+    }
+
+    /**
      * Operate the teleportation to the linked Teleporter.
      * @param unit the unit to teleport to the Square of linked Teleporter
      */
