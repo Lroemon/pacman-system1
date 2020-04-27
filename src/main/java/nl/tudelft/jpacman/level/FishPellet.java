@@ -16,6 +16,8 @@ import java.util.Map;
  * The duration of the non-movable state for Pacman depends on the distance of the closest Ghost. There is a base time
  * anyway, so sometimes Pacman will be fated to die but that's his fault, don't eat Nemo Pacman ! The closer a ghost
  * is, the less time he will be trapped though.
+ *
+ * @author Rémy Decocq
  */
 public class FishPellet extends SpecialPellet {
 

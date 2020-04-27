@@ -11,6 +11,8 @@ import java.util.TimerTask;
  * A special pellet can give bonus/penalty to Pacman when eaten (behaviour defined by subclassing). The effect has a
  * given duration and may change Pacman's state {@link Player#getSpecialState()} taken into account by some game rules
  * depending the considered effect. Also, this state modification may be signaled changing Pacman's current sprites.
+ *
+ * @author Rémy Decocq
  */
 public class SpecialPellet extends Pellet {
 

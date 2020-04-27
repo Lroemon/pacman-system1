@@ -177,6 +177,11 @@ public class Level {
         startSquareIndex %= startSquares.size();
     }
 
+    /**
+     * Set a spawner for this Level instance, this method is already called by
+     * {@link SpecialUnitySpawner#setLevel(Level)} when linking it with this level.
+     * @param spawner the spawner to use for probabilistic spawning special units in this level
+     */
     public void setSpawner(SpecialUnitySpawner spawner) {
         this.spawner = spawner;
     }
@@ -295,6 +300,9 @@ public class Level {
         }
     }
 
+    /**
+     * Start calling to spawner every {@link #SPECIAL_SPAWNING_INTERVAL}
+     */
     private void startSpawner(){
         if (this.spawner != null) {
             ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
@@ -304,6 +312,9 @@ public class Level {
         }
     }
 
+    /**
+     * Stop repeated calling to spawner
+     */
     private void stopSpawner(){
         if (this.spawnService != null)
             this.spawnService.shutdownNow();
@@ -486,11 +497,19 @@ public class Level {
     }
 
 
+    /**
+     * A task to make calls to the spawner, that spawns some special units in the board level with probability
+     */
     private final class DynamicSpawnTask implements Runnable {
 
         private final ScheduledExecutorService service;
         private final SpecialUnitySpawner spawner;
 
+        /**
+         * Create a new task calling repeatedly at {@link #SPECIAL_SPAWNING_INTERVAL} interval
+         * @param service the service
+         * @param spawner the spawner
+         */
         DynamicSpawnTask(ScheduledExecutorService service, SpecialUnitySpawner spawner){
             this.service = service;
             this.spawner = spawner;

@@ -3,10 +3,19 @@ package nl.tudelft.jpacman.level;
 import nl.tudelft.jpacman.board.Unit;
 import nl.tudelft.jpacman.sprite.Sprite;
 
+/**
+ * A special box is persistent in the square it is placed on and can apply on any unity (various effects).
+ *
+ * @author Rémy Decocq
+ */
 public class SpecialBox extends Unit {
 
     private final Sprite image;
 
+    /**
+     * A special box not eatable and that may apply to any unit
+     * @param sprite the sprite corresponding to the special box
+     */
     public SpecialBox(Sprite sprite) {
         super.setMovable(false);
         this.image = sprite;

@@ -14,6 +14,8 @@ import java.util.List;
  * The range of the explosion depends on on the number of remaining lives for Pacman : the more unsafe he is, the more
  * powerful the explosion (ranges up to 4 squares). It takes into account walls, so this is the path length that is
  * considered.
+ *
+ * @author Rémy Decocq
  */
 public class GrenadePellet extends Pellet {
 

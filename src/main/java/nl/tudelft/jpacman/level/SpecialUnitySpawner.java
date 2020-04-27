@@ -14,6 +14,12 @@ import java.util.Random;
  *   - the fact that it will be a bonus or penalty depends on the current player score compared to a fixed reference,
  *     the more score he has, the higher is the chance to spawn units applying penalty. When score is high, the game
  *     is close to end and now way to facilitate it for the player !
+ *
+ * The linking with the level is done using {@link #setLevel(Level)}, and the time part is handled by it. It means
+ * it should call at a time interval {@link #trySpawnSpecial()} to spawn new unit in with some probability depending
+ * its current state.
+ *
+ * @author Rémy Decocq
  */
 public class SpecialUnitySpawner {
 
@@ -22,7 +28,6 @@ public class SpecialUnitySpawner {
     private static final int NBR_BOXES = 3;
 
     private static final float PELLET_CHANCE = 0.7f;
-    private static final float BOX_CHANCE = 1 - PELLET_CHANCE;
     private static final float REFERENCE_SCORE = 10000;
     private static final float CAP_SPAWN_CHANCE = 0.7f;
 
@@ -32,10 +37,23 @@ public class SpecialUnitySpawner {
     private int initNbrPellets;
     private ArrayList<Square> lastFreeSquares;
 
+    /**
+     * Create a spawner for new special units in a given level to set with {@link #setLevel(Level)}, using an already
+     * existing factory to instantiate those new units
+     *
+     * @param levelCreator a factory for new units
+     */
     public SpecialUnitySpawner(LevelFactory levelCreator){
         this.levelCreator = levelCreator;
     }
 
+    /**
+     * Spawn a new special unit with a given chance. The finally chosen unit depends again on a probabilistic process
+     * (see {@link SpecialUnitySpawner}).
+     *
+     * @param chanceSpawn the chance to spawn a new special unit
+     * @return true iff spawned
+     */
     public boolean trySpawnSpecial(float chanceSpawn){
         assert level != null;
         if (rdm.nextFloat() > chanceSpawn)
@@ -51,6 +69,11 @@ public class SpecialUnitySpawner {
         }
     }
 
+    /**
+     * Try with an automatically computed probability to spawn a new special unit on a free square of the board.
+     * This probability depends on the current number of available pellets against initial number.
+     * @return true iff a unit was spawned
+     */
     public boolean trySpawnSpecial(){
         this.lastFreeSquares = this.level.getBoard().getFreeOccupantSquares();
         if (lastFreeSquares.size() == 0)
@@ -99,7 +122,7 @@ public class SpecialUnitySpawner {
             t2.occupy(targetTo);
             return true;
         } else if (ind == 2){
-            levelCreator.createBridgeBox(Direction.getRdmDir());
+            levelCreator.createBridgeBox(Direction.getRdmDir()).occupy(target);
             return true;
         }
         return false;
@@ -112,6 +135,12 @@ public class SpecialUnitySpawner {
         return true;
     }
 
+    /**
+     * Set the level to consider to spawn new unit in and retrieve material for probabilities computation
+     * Reciprocally register this spawner to the given level {@link Level#setSpawner(SpecialUnitySpawner)}.
+     *
+     * @param level the level to consider
+     */
     public void setLevel(Level level){
         this.level = level;
         this.initNbrPellets = this.level.remainingPellets();

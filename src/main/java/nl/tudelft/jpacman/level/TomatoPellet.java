@@ -10,6 +10,8 @@ import java.util.Map;
  * A Tomato pellet ({@link SpecialPellet}) is a positive bonus that make Pacman invisible to ghosts when eaten,
  * with variation considering the current state of the level.
  * It is based on remaining lives, a Pacman that only has 1 life should be safe longer !
+ *
+ * @author Rémy Decocq
  */
 public class TomatoPellet extends SpecialPellet {
 

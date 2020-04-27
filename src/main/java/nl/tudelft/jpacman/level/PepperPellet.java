@@ -11,6 +11,8 @@ import java.util.Map;
  * considering the current state of the level.
  * It is based on score, a player that already scored should deserve a better speed bonus to reach still unexplored
  * labyrinth areas !
+ *
+ * @author Rémy Decocq
  */
 public class PepperPellet extends SpecialPellet {
 

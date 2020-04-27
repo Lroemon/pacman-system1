@@ -181,6 +181,10 @@ public class Board {
         return this.getSquaresByOccupantsNbr(0);
     }
 
+    /**
+     * @param nbr the number of occupants that a square in selection must have
+     * @return A list of all board squares with nbr occupants and that are not a Wall
+     */
     public ArrayList<Square> getSquaresByOccupantsNbr(int nbr){
         ArrayList<Square> frees = new ArrayList<>();
         for(int i=0; i < this.getWidth(); i++){

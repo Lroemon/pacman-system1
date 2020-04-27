@@ -16,6 +16,11 @@ import static org.mockito.Mockito.mock;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Test for each implemented special pellet and effect they have on units
+ *
+ * @author Rémy Decocq
+ */
 public class SpecialPelletTest {
 
     private final int SCORE = 10;

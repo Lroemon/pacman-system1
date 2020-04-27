@@ -83,10 +83,9 @@ public enum Direction {
         return d == WEST || d == EAST;
     }
 
-    public static boolean areOnSameAlign(Direction d1, Direction d2){
-        return (isHorizontalAlign(d1) && isHorizontalAlign(d2)) || (isVerticalAlign(d1) && isVerticalAlign(d2));
-    }
-
+    /**
+     * @return a random dir among 4 available
+     */
     public static Direction getRdmDir(){
         return Lists.newArrayList(NORTH, SOUTH, EAST, WEST).get(new Random().nextInt(4));
     }

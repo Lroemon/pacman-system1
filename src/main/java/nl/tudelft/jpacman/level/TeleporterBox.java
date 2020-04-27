@@ -7,6 +7,8 @@ import nl.tudelft.jpacman.sprite.Sprite;
 /**
  * A Teleporter is a special box that works by pair. There must be another Teleporter linked with to allow Pacman
  * to teleport from each other (both directions). Ghosts cannot take it.
+ *
+ * @author Rémy Decocq
  */
 public class TeleporterBox extends SpecialBox {
 

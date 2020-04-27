@@ -12,6 +12,8 @@ import java.util.Map;
  * considering the current state of the level.
  * The duration of the effect depends on the current score : the more Pacman has, the more he's a juicy target for
  * ghosts and so they will be buffed longer. Miam miam.
+ *
+ * @author Rémy Decocq
  */
 public class PotatoPellet extends SpecialPellet {
 

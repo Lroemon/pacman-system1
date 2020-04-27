@@ -17,6 +17,11 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+/**
+ * Test for each implemented special box and their effect on units
+ *
+ * @author Rémy Decocq
+ */
 public class SpecialBoxTest {
 
     private final PacManSprites sprites = new PacManSprites();

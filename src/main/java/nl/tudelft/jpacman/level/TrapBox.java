@@ -9,6 +9,8 @@ import java.util.TimerTask;
 /**
  * A Trap is a special box acting as a penalty when any unit walks on it.
  * It locks the unit on the square for a certain amount of time.
+ *
+ * @author Rémy Decocq
  */
 public class TrapBox extends SpecialBox {
 
