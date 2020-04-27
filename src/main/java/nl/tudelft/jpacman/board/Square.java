@@ -89,6 +89,9 @@ public abstract class Square {
         return boxes;
     }
 
+    /**
+     * @return a unit list logically ordered depending vertical levels : DOWN -> Special Boxes (eg bridges) -> UP
+     */
     public List<Unit> getGraphicalOrderedOccupants(){
         ArrayList<Unit> boxes = new ArrayList<>();
         ArrayList<Unit> down = new ArrayList<>();

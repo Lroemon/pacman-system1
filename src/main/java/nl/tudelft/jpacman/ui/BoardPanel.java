@@ -116,8 +116,6 @@ class BoardPanel extends JPanel {
     private void render(Square square, Graphics graphics, int x, int y, int width, int height) {
         square.getSprite().draw(graphics, x, y, width, height);
         List<Unit> ordered = square.getGraphicalOrderedOccupants();
-        if(ordered.size() > 1)
-        System.out.println(ordered);
         for (Unit unit: ordered) {
             unit.getSprite().draw(graphics, x, y, width, height);
         }

@@ -14,11 +14,23 @@ import nl.tudelft.jpacman.sprite.Sprite;
  */
 public class BridgeBox extends SpecialBox {
 
+    /**
+     * An oriented bridge with an up and a down way depending its direction.
+     * @param direction indicates the direction of the up-road (so NORTH would semantically leads to same bridge than
+     *                  SOUTH).
+     * @param sprite the sprite to use for a bridge oriented this way
+     */
     public BridgeBox(Direction direction, Sprite sprite) {
         super(sprite);
         super.setDirection(direction);
     }
 
+    /**
+     * Change vertical level of an unit coming into the bridge square, depending its entering direction and the bridge
+     * orientation
+     *
+     * @param unit the unit coming in the bridge
+     */
     private void changeLevelUsingComingDir(Unit unit) {
         Direction uDir = unit.getDirection();
         Direction bDir = super.getDirection();
@@ -41,6 +53,11 @@ public class BridgeBox extends SpecialBox {
         return true;
     }
 
+    /**
+     * Get which bridge road the unit is in considering its vertical level
+     * @param u the unit
+     * @return the alignement of the road
+     */
     public Align getAlignForLevel(Unit u){
         if (Direction.isVerticalAlign(getDirection())){
             if (u.getVerticalPosition() == VerticalPos.DOWN)
@@ -55,6 +72,9 @@ public class BridgeBox extends SpecialBox {
         }
     }
 
+    /**
+     * Stands for one of the two possible ways to cross a bridge, see {@link BridgeBox}.
+     */
     public enum Align {
         HORIZONTAL, VERTICAL;
     }

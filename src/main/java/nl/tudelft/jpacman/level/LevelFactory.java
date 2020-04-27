@@ -169,6 +169,10 @@ public class LevelFactory {
         return newTp;
     }
 
+    /**
+     * @param direction an orientation for the bridge (up road)
+     * @return a Bridge that impact {@link nl.tudelft.jpacman.board.Unit.VerticalPos} of units (see {@link BridgeBox})
+     */
     public BridgeBox createBridgeBox(Direction direction){
         return new BridgeBox(direction, sprites.getBridgeBox(direction));
     }
