@@ -2,6 +2,7 @@ package nl.tudelft.jpacman.board;
 
 import com.google.common.collect.Lists;
 import nl.tudelft.jpacman.level.*;
+import nl.tudelft.jpacman.level.specialpellet.*;
 import nl.tudelft.jpacman.npc.Ghost;
 import nl.tudelft.jpacman.npc.ghost.GhostColor;
 import nl.tudelft.jpacman.npc.ghost.Pinky;

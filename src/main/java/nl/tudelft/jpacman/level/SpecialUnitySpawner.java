@@ -2,6 +2,9 @@ package nl.tudelft.jpacman.level;
 
 import nl.tudelft.jpacman.board.Direction;
 import nl.tudelft.jpacman.board.Square;
+import nl.tudelft.jpacman.level.specialbox.SpecialBox;
+import nl.tudelft.jpacman.level.specialbox.TeleporterBox;
+import nl.tudelft.jpacman.level.specialpellet.SpecialPellet;
 
 import java.util.ArrayList;
 import java.util.Random;

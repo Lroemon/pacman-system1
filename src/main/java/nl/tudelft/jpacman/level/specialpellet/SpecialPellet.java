@@ -1,6 +1,8 @@
-package nl.tudelft.jpacman.level;
+package nl.tudelft.jpacman.level.specialpellet;
 
 import nl.tudelft.jpacman.board.Direction;
+import nl.tudelft.jpacman.level.Pellet;
+import nl.tudelft.jpacman.level.Player;
 import nl.tudelft.jpacman.sprite.Sprite;
 
 import java.util.Map;

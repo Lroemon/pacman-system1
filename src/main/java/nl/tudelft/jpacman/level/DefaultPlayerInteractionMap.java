@@ -1,6 +1,7 @@
 package nl.tudelft.jpacman.level;
 
 import nl.tudelft.jpacman.board.Unit;
+import nl.tudelft.jpacman.level.specialbox.SpecialBox;
 import nl.tudelft.jpacman.npc.Ghost;
 
 /**

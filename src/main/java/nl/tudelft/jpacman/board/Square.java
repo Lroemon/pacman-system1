@@ -7,8 +7,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
-import nl.tudelft.jpacman.level.BridgeBox;
-import nl.tudelft.jpacman.level.SpecialBox;
+import nl.tudelft.jpacman.level.specialbox.BridgeBox;
+import nl.tudelft.jpacman.level.specialbox.SpecialBox;
 import nl.tudelft.jpacman.sprite.Sprite;
 /**
  * A square on a {@link Board}, which can (or cannot, depending on the type) be

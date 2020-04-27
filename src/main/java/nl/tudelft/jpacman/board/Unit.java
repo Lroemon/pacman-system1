@@ -1,6 +1,7 @@
 package nl.tudelft.jpacman.board;
 
 import nl.tudelft.jpacman.level.Level;
+import nl.tudelft.jpacman.level.specialbox.BridgeBox;
 import nl.tudelft.jpacman.sprite.Sprite;
 
 /**
@@ -198,7 +199,7 @@ public abstract class Unit {
 
     /**
      * Stands for being at level 0 or 1 of the square, mechanic introduced by Bridges Special Box
-     * ({@link nl.tudelft.jpacman.level.BridgeBox}).
+     * ({@link BridgeBox}).
      */
     public enum VerticalPos {
         UP, DOWN;

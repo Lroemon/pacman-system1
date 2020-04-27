@@ -1,6 +1,7 @@
-package nl.tudelft.jpacman.level;
+package nl.tudelft.jpacman.level.specialbox;
 
 import nl.tudelft.jpacman.board.Unit;
+import nl.tudelft.jpacman.level.Level;
 import nl.tudelft.jpacman.sprite.Sprite;
 
 /**

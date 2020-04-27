@@ -1,7 +1,9 @@
-package nl.tudelft.jpacman.level;
+package nl.tudelft.jpacman.level.specialpellet;
 
 import nl.tudelft.jpacman.board.Direction;
 import nl.tudelft.jpacman.board.Unit;
+import nl.tudelft.jpacman.level.Level;
+import nl.tudelft.jpacman.level.Player;
 import nl.tudelft.jpacman.npc.Ghost;
 import nl.tudelft.jpacman.npc.ghost.Navigation;
 import nl.tudelft.jpacman.sprite.PacManSprites;

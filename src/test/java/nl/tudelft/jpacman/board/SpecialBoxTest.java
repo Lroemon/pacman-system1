@@ -2,6 +2,9 @@ package nl.tudelft.jpacman.board;
 
 import com.google.common.collect.Lists;
 import nl.tudelft.jpacman.level.*;
+import nl.tudelft.jpacman.level.specialbox.BridgeBox;
+import nl.tudelft.jpacman.level.specialbox.TeleporterBox;
+import nl.tudelft.jpacman.level.specialbox.TrapBox;
 import nl.tudelft.jpacman.npc.Ghost;
 import nl.tudelft.jpacman.npc.ghost.GhostColor;
 import nl.tudelft.jpacman.npc.ghost.Pinky;
