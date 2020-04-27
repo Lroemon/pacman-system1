@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A Fish pellet ({@link SpecialPellet}) is a penalty that locks down pacman still in his square, with variation
+ * A Fish pellet ({@link SpecialPellet}) is a penalty that locks pacman down still in his square, with variation
  * considering the current state of the level.
  * The duration of the non-movable state for Pacman depends on the distance of the closest Ghost. There is a base time
  * anyway, so sometimes Pacman will be fated to die but that's his fault, don't eat Nemo Pacman ! The closer a ghost

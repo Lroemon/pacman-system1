@@ -36,19 +36,10 @@ public class SpecialPellet extends Pellet {
      * @param newState
      * @param newPacmanSprites directed sprites based on ones used by default to display Pacman
      */
-    protected static void setNewStatePlayer(Player player, Player.SpecialStates newState,
+    public static void setNewStatePlayer(Player player, Player.SpecialStates newState,
                                             Map<Direction, Sprite> newPacmanSprites) {
         player.setSpecialState(newState);
         player.setSprite(newPacmanSprites);
-    }
-
-    /**
-     * @see #setNewStatePlayer(Player, Player.SpecialStates, Map)  
-     * @param player
-     * @param newState
-     */
-    protected static void setNewStatePlayer(Player player, Player.SpecialStates newState){
-        player.setSpecialState(newState);
     }
 
     /**

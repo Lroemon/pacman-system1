@@ -225,6 +225,10 @@ public class Player extends Unit {
         return true;
     }
 
+    public float getSpeedModifier(){
+        return this.speedModifier;
+    }
+
     /**
      * Reset the {@link #speedModifier} to 1 (no modification on regular speed).
      */
@@ -234,7 +238,7 @@ public class Player extends Unit {
 
     /**
      *
-     * @return the speed of the player.
+     * @return the speed of the player (number of squares per second).
      */
     public float getSpeed(){
         return this.speed * this.speedModifier;
