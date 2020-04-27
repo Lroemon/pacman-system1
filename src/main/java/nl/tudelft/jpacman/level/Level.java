@@ -26,6 +26,8 @@ public class Level {
     private static final int FIRST_STEP_SCARING_TIME = 7;
     private static final int SECOND_STEP_SCARING_TIME = 5;
 
+    private static final long SPECIAL_SPAWNING_INTERVAL = 7000L;
+
     /**
      * The board of this level.
      */
@@ -92,6 +94,12 @@ public class Level {
      * The timer which manages the time left for the scaring level.
      */
     private Timer scaringTimer;
+
+    /**
+     * The spawner object to spawn dynamically special pellets and boxes in the board
+     */
+    private SpecialUnitySpawner spawner;
+    private ScheduledExecutorService spawnService;
 
     /**
      * Creates a new level for the board.
@@ -169,6 +177,10 @@ public class Level {
         startSquareIndex %= startSquares.size();
     }
 
+    public void setSpawner(SpecialUnitySpawner spawner) {
+        this.spawner = spawner;
+    }
+
     /**
      * Returns the board of this level.
      *
@@ -176,6 +188,12 @@ public class Level {
      */
     public Board getBoard() {
         return board;
+    }
+
+    public Player getOnePlayer(){
+        if (this.players.size() > 0)
+            return this.players.get(0);
+        return null;
     }
 
     /**
@@ -230,6 +248,7 @@ public class Level {
                 return;
             }
             startNPCs();
+            startSpawner();
             inProgress = true;
             updateObservers();
         }
@@ -245,6 +264,7 @@ public class Level {
                 return;
             }
             stopNPCs();
+            stopSpawner();
             inProgress = false;
         }
     }
@@ -273,6 +293,20 @@ public class Level {
             assert schedule != null;
             schedule.shutdownNow();
         }
+    }
+
+    private void startSpawner(){
+        if (this.spawner != null) {
+            ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+            this.spawnService = service;
+            service.schedule(new DynamicSpawnTask(service, this.spawner),
+                SPECIAL_SPAWNING_INTERVAL, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    private void stopSpawner(){
+        if (this.spawnService != null)
+            this.spawnService.shutdownNow();
     }
 
     /**
@@ -448,6 +482,24 @@ public class Level {
             }
             long interval = npc.getInterval();
             service.schedule(this, interval, TimeUnit.MILLISECONDS);
+        }
+    }
+
+
+    private final class DynamicSpawnTask implements Runnable {
+
+        private final ScheduledExecutorService service;
+        private final SpecialUnitySpawner spawner;
+
+        DynamicSpawnTask(ScheduledExecutorService service, SpecialUnitySpawner spawner){
+            this.service = service;
+            this.spawner = spawner;
+        }
+
+        @Override
+        public void run() {
+            spawner.trySpawnSpecial();
+            service.schedule(this, SPECIAL_SPAWNING_INTERVAL, TimeUnit.MILLISECONDS);
         }
     }
 

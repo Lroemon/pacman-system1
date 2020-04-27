@@ -93,7 +93,10 @@ public class LevelFactory {
         DefaultPlayerInteractionMap collisionMap = new DefaultPlayerInteractionMap();
         Level level = new Level(board, ghosts, startPositions, collisionMap);
 
+        SpecialUnitySpawner spawner = new SpecialUnitySpawner(this);
+
         collisionMap.setLevel(level);
+        spawner.setLevel(level);
 
         return level;
     }

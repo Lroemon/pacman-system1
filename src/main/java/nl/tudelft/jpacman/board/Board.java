@@ -5,6 +5,7 @@ import nl.tudelft.jpacman.PacmanConfigurationException;
 import nl.tudelft.jpacman.level.Player;
 import nl.tudelft.jpacman.level.PlayerFactory;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -175,4 +176,21 @@ public class Board {
         }
         return null;
     }
+
+    public ArrayList<Square> getFreeOccupantSquares(){
+        return this.getSquaresByOccupantsNbr(0);
+    }
+
+    public ArrayList<Square> getSquaresByOccupantsNbr(int nbr){
+        ArrayList<Square> frees = new ArrayList<>();
+        for(int i=0; i < this.getWidth(); i++){
+            for(int j=0; j < this.getHeight(); j++){
+                Square s = this.squareAt(i, j);
+                if(s.getOccupants().size() == nbr && !(s instanceof BoardFactory.Wall))
+                    frees.add(this.squareAt(i, j));
+            }
+        }
+        return frees;
+    }
+
 }

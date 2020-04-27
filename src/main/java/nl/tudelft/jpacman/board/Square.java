@@ -112,6 +112,13 @@ public abstract class Square {
     }
 
     /**
+     * @return true iif there is no occupant at this square
+     */
+    public boolean isFree(){
+        return this.occupants.isEmpty();
+    }
+
+    /**
      * Adds a new occupant to this square.
      *
      * @param occupant

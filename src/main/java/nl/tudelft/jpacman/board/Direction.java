@@ -1,5 +1,10 @@
 package nl.tudelft.jpacman.board;
 
+import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * An enumeration of possible directions on a two-dimensional square grid.
  *
@@ -81,4 +86,9 @@ public enum Direction {
     public static boolean areOnSameAlign(Direction d1, Direction d2){
         return (isHorizontalAlign(d1) && isHorizontalAlign(d2)) || (isVerticalAlign(d1) && isVerticalAlign(d2));
     }
+
+    public static Direction getRdmDir(){
+        return Lists.newArrayList(NORTH, SOUTH, EAST, WEST).get(new Random().nextInt(4));
+    }
+
 }
