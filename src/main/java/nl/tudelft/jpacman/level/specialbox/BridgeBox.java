@@ -51,6 +51,12 @@ public class BridgeBox extends SpecialBox {
         }
     }
 
+    /**
+     * Called when an unit walk on the box square.
+     * @param level the current level
+     * @param unit the unit that walked on the box
+     * @return true iff an action was performed
+     */
     @Override
     public boolean onTake(Level level, Unit unit) {
         this.changeLevelUsingComingDir(unit);

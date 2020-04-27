@@ -17,10 +17,24 @@ import java.util.Map;
  */
 public class TomatoPellet extends SpecialPellet {
 
+    /**
+     * The threshold on number of player lives to vary effect
+     */
     public static final int LIFE_THRESH_DURATION = 1;
+
+    /**
+     * The basic effect duration
+     */
     public static final long BASIC_DURATION = 3000L;
+
+    /**
+     * The increased effect duration
+     */
     public static final long INCREASED_DURATION = 5000L;
 
+    /**
+     * The oriented sprites to modify Pacman skin during effect
+     */
     private static final Map<Direction, Sprite> pacmanSprites = new PacManSprites().getPacmanTomatoSprites();
 
 
@@ -34,6 +48,11 @@ public class TomatoPellet extends SpecialPellet {
         super(points, sprite);
     }
 
+    /**
+     * Called when this pellet is eaten by a Player (pacman)
+     * @param level the current level
+     * @param player who eat this pellet
+     */
     @Override
     public void onEat(Level level, Player player){
         super.onEat(level, player);

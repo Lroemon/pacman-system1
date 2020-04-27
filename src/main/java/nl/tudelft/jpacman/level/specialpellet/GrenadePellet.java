@@ -22,7 +22,13 @@ import java.util.List;
  */
 public class GrenadePellet extends Pellet {
 
+    /**
+     * Max range of explosion in squares
+     */
     public static final int MAX_RANGE = 4;
+    /**
+     * Min range of explosion in squares
+     */
     public static final int MIN_RANGE = 2;
 
     /**
@@ -67,6 +73,11 @@ public class GrenadePellet extends Pellet {
         }
     }
 
+    /**
+     * Called when this pellet is eaten by a Player (pacman)
+     * @param level the current level
+     * @param player who eat this pellet
+     */
     @Override
     public void onEat(Level level, Player player){
         super.onEat(level, player);

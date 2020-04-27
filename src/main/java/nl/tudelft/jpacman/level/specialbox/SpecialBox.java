@@ -11,6 +11,9 @@ import nl.tudelft.jpacman.sprite.Sprite;
  */
 public class SpecialBox extends Unit {
 
+    /**
+     * units sprite
+     */
     private final Sprite image;
 
     /**
@@ -22,6 +25,9 @@ public class SpecialBox extends Unit {
         this.image = sprite;
     }
 
+    /**
+     * @return the sprite used to display the box
+     */
     @Override
     public Sprite getSprite() {
         return this.image;

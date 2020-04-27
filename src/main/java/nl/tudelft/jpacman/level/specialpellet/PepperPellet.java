@@ -18,13 +18,33 @@ import java.util.Map;
  */
 public class PepperPellet extends SpecialPellet {
 
+    /**
+     * A basic speed multiplier
+     */
     public static final float BASIC_SPEED_FACTOR = 1.8f;
+    /**
+     * A strong speed multiplier
+     */
     public static final float INCREASED_SPEED_FACTOR = 2.5f;
 
+    /**
+     * Threshold on score to vary effect
+     */
     public static final int SCORE_THRESH_DURATION = 1500;
+
+    /**
+     * Basic effect time
+     */
     public static final long BASIC_DURATION = 3000L;
+
+    /**
+     * Increased effect time
+     */
     public static final long INCREASED_DURATION = 5000L;
 
+    /**
+     * The oriented sprites to modify Pacman skin during effect
+     */
     private static final Map<Direction, Sprite> pacmanSprites = new PacManSprites().getPacmanPepperSprites();
 
 
@@ -49,6 +69,11 @@ public class PepperPellet extends SpecialPellet {
             player.setSpeedModifier(BASIC_SPEED_FACTOR);
     }
 
+    /**
+     * Called when this pellet is eaten by a Player (pacman)
+     * @param level the current level
+     * @param player who eat this pellet
+     */
     @Override
     public void onEat(Level level, Player player){
         super.onEat(level, player);

@@ -19,13 +19,29 @@ import java.util.Map;
  */
 public class PotatoPellet extends SpecialPellet {
 
+    /**
+     * The ghost speed multiplier
+     */
     public static final float SPEED_MULTIPLIER = 2f;
 
+    /**
+     * The basic duration time
+     */
     public static final long BASIC_DURATION = 4000L;
+
+    /**
+     * The increased duration time
+     */
     public static final long INCREASED_DURATION = 7000L;
 
+    /**
+     * The threshold on score to vary effect
+     */
     public static final int SCORE_THRESH_DURATION = 1500;
 
+    /**
+     * The oriented sprites to modify Pacman skin during effect
+     */
     private static final Map<Direction, Sprite> pacmanSprites = new PacManSprites().getPacmanPotatoSprites();
 
     /**
@@ -54,6 +70,11 @@ public class PotatoPellet extends SpecialPellet {
         return player.getScore() < SCORE_THRESH_DURATION ? BASIC_DURATION : INCREASED_DURATION;
     }
 
+    /**
+     * Called when this pellet is eaten by a Player (pacman)
+     * @param level the current level
+     * @param player who eat this pellet
+     */
     @Override
     public void onEat(Level level, Player player){
         super.onEat(level, player);
@@ -63,6 +84,9 @@ public class PotatoPellet extends SpecialPellet {
         scheduleEffectDuration(new StopPotatoEffect(player, level), duration);
     }
 
+    /**
+     * The task to stop effect
+     */
     private class StopPotatoEffect extends StopEffect{
 
         private final Level level;

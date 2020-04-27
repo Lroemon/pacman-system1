@@ -15,6 +15,9 @@ import java.util.TimerTask;
  */
 public class TrapBox extends SpecialBox {
 
+    /**
+     * Fixed time to wait trapped
+     */
     public static final long BASE_WAITING_TIME = 2000L;
 
     /**
@@ -22,11 +25,21 @@ public class TrapBox extends SpecialBox {
      */
     private final Timer timer;
 
+    /**
+     * A Trap locking units for a given time
+     * @param sprite the sprite to display
+     */
     public TrapBox(Sprite sprite) {
         super(sprite);
         this.timer = new Timer();
     }
 
+    /**
+     * Called when an unit walk on the box square.
+     * @param level the current level
+     * @param unit the unit that walked on the box
+     * @return true iff an action was performed
+     */
     @Override
     public boolean onTake(Level level, Unit unit){
         unit.setMovable(false);
@@ -34,6 +47,9 @@ public class TrapBox extends SpecialBox {
         return true;
     }
 
+    /**
+     * Task to disable trap effect on trapped unit
+     */
     protected class StopTrapEffect extends TimerTask {
 
         protected final Unit unit;

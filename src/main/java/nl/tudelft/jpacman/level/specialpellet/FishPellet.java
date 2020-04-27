@@ -23,11 +23,24 @@ import java.util.Map;
  */
 public class FishPellet extends SpecialPellet {
 
+    /**
+     * Considered ghosts distance
+     */
     public static final int GHOST_DIST_THRESH = 12;
 
+    /**
+     * Basic time for the penalty
+     */
     public static final long BASIC_DURATION = 1000L;
+
+    /**
+     * Increased time when effect is stronger
+     */
     public static final long INCREASED_DURATION = 3000L;
 
+    /**
+     * The oriented sprites to modify Pacman skin during effect
+     */
     private static final Map<Direction, Sprite> pacmanSprites = new PacManSprites().getPacmanFishSprites();
 
     /**
@@ -62,6 +75,11 @@ public class FishPellet extends SpecialPellet {
         return BASIC_DURATION + (durationDiff / (1 + (GHOST_DIST_THRESH - ghostDist)));
     }
 
+    /**
+     * Called when this pellet is eaten by a Player (pacman)
+     * @param level the current level
+     * @param player who eat this pellet
+     */
     @Override
     public void onEat(Level level, Player player){
         super.onEat(level, player);
